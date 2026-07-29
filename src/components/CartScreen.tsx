@@ -1,7 +1,8 @@
 import { business } from '../config'
-import { buildOrderMessage, formatPrice, whatsappUrl } from '../lib/whatsapp'
-import type { CartLine, MenuItem } from '../types'
-import { BackIcon, LeafIcon, TrashIcon, WhatsappIcon } from './Icons'
+import { formatPrice, sizeLabel } from '../lib/whatsapp'
+import type { CartLine, MenuItem, Size } from '../types'
+import { BackIcon, LeafIcon, TrashIcon } from './Icons'
+import { OrderTotals } from './OrderTotals'
 import { QuantityStepper } from './QuantityStepper'
 
 interface Props {
@@ -9,9 +10,10 @@ interface Props {
   subtotal: number
   shipping: number
   total: number
-  onSetQuantity: (item: MenuItem, quantity: number) => void
-  onRemove: (item: MenuItem) => void
+  onSetQuantity: (item: MenuItem, size: Size, quantity: number) => void
+  onRemove: (item: MenuItem, size: Size) => void
   onBack: () => void
+  onContinue: () => void
 }
 
 export function CartScreen({
@@ -22,6 +24,7 @@ export function CartScreen({
   onSetQuantity,
   onRemove,
   onBack,
+  onContinue,
 }: Props) {
   const isEmpty = lines.length === 0
 
@@ -46,23 +49,24 @@ export function CartScreen({
         <p className="cart-empty">Tu pedido está vacío. ¡Agrega algún antojo! ♥</p>
       ) : (
         <ul className="cart-lines">
-          {lines.map(({ item, quantity }) => (
-            <li key={item.id} className="cart-line">
+          {lines.map(({ key, item, size, quantity }) => (
+            <li key={key} className="cart-line">
               <img className="cart-line__image" src={item.image} alt={item.name} />
               <div className="cart-line__body">
                 <h2 className="cart-line__name">{item.name.toUpperCase()}</h2>
+                <p className="cart-line__size">{sizeLabel(size)}</p>
                 <div className="cart-line__row">
-                  <span className="cart-line__price">{formatPrice(item.price * quantity)}</span>
+                  <span className="cart-line__price">{formatPrice(size.price * quantity)}</span>
                   <QuantityStepper
-                    label={item.name}
+                    label={`${item.name} ${sizeLabel(size)}`}
                     quantity={quantity}
-                    onChange={(next) => onSetQuantity(item, next)}
+                    onChange={(next) => onSetQuantity(item, size, next)}
                   />
                   <button
                     type="button"
                     className="cart-line__remove"
-                    aria-label={`Eliminar ${item.name}`}
-                    onClick={() => onRemove(item)}
+                    aria-label={`Eliminar ${item.name} ${sizeLabel(size)}`}
+                    onClick={() => onRemove(item, size)}
                   >
                     <TrashIcon className="icon" />
                   </button>
@@ -73,34 +77,16 @@ export function CartScreen({
         </ul>
       )}
 
-      <section className="totals">
-        <div className="totals__row">
-          <span>Subtotal</span>
-          <span>{formatPrice(subtotal)}</span>
-        </div>
-        <div className="totals__row">
-          <span>Envío</span>
-          <span>{formatPrice(shipping)}</span>
-        </div>
-        <div className="totals__row totals__row--grand">
-          <span>TOTAL</span>
-          <span>{formatPrice(total)}</span>
-        </div>
-      </section>
+      <OrderTotals subtotal={subtotal} shipping={shipping} total={total} />
 
-      <a
-        className={`button button--primary button--whatsapp${isEmpty ? ' button--disabled' : ''}`}
-        href={isEmpty ? undefined : whatsappUrl(buildOrderMessage(lines, subtotal, shipping))}
-        target="_blank"
-        rel="noreferrer"
-        aria-disabled={isEmpty}
+      <button
+        type="button"
+        className={`button button--primary${isEmpty ? ' button--disabled' : ''}`}
+        disabled={isEmpty}
+        onClick={onContinue}
       >
-        <WhatsappIcon className="icon icon--whatsapp" />
-        <span>
-          <strong>ENVIAR PEDIDO POR WHATSAPP</strong>
-          <small>Te llevaremos a WhatsApp con tu pedido listo</small>
-        </span>
-      </a>
+        <strong>CONTINUAR CON MIS DATOS</strong>
+      </button>
 
       <button type="button" className="button button--ghost" onClick={onBack}>
         SEGUIR COMPRANDO

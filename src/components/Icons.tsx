@@ -68,15 +68,6 @@ export function WhatsappIcon({ className }: IconProps) {
   )
 }
 
-export function ColdDrinkIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <path d="M7 8h10l-1.2 11a2 2 0 0 1-2 1.8h-3.6a2 2 0 0 1-2-1.8Z" />
-      <path d="M6 8h12M12 4v2" />
-    </svg>
-  )
-}
-
 export function HotDrinkIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
@@ -87,11 +78,61 @@ export function HotDrinkIcon({ className }: IconProps) {
   )
 }
 
-export function CakeIcon({ className }: IconProps) {
+export function MatchaIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <path d="M4 18h16v2H4zM4 18l8-9 8 9" />
-      <path d="M8 13.5h8" />
+      <path d="M7 9h10l-1.1 10.2a2 2 0 0 1-2 1.8h-3.8a2 2 0 0 1-2-1.8Z" />
+      <path d="M6 9h12" />
+      <path d="M12 7c-2.2 0-3.4-1.4-3.4-3.4C10.8 3.6 12 5 12 7Zm0 0c2.2 0 3.4-1.4 3.4-3.4C13.2 3.6 12 5 12 7Z" />
+    </svg>
+  )
+}
+
+export function CerealIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M4 11h16a8 8 0 0 1-8 8 8 8 0 0 1-8-8Z" />
+      <path d="M8.5 8.2a1.4 1.4 0 1 0 0-.1M12 6.6a1.4 1.4 0 1 0 0-.1M15.6 8.4a1.4 1.4 0 1 0 0-.1" />
+    </svg>
+  )
+}
+
+export function BirthdayIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M5 20h14v-6a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3Z" />
+      <path d="M12 8V5M11 3.6c.7.5 1.3.5 2 0" />
+      <path d="M5 15c1.6 1.4 3.2 1.4 4.7 0 1.6 1.4 3.1 1.4 4.7 0 1.5 1.4 3.1 1.4 4.6 0" />
+    </svg>
+  )
+}
+
+export function SmoothieIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M7 10h10l-1.1 9.2a2 2 0 0 1-2 1.8h-3.8a2 2 0 0 1-2-1.8Z" />
+      <path d="M13 10l3-6" />
+      <path d="M9.5 14.5a1.3 1.3 0 1 0 0-.1M13.8 16.6a1.3 1.3 0 1 0 0-.1" />
+    </svg>
+  )
+}
+
+export function MilkshakeIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M8 11h8l-1 9.2a2 2 0 0 1-2 1.8h-2a2 2 0 0 1-2-1.8Z" />
+      <path d="M8 11c0-2.8 1.8-4.4 4-4.4S16 8.2 16 11" />
+      <path d="M12 6.6V4M14.5 11l2-5" />
+    </svg>
+  )
+}
+
+export function RefresherIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M6 8h12l-1.4 11.2a2 2 0 0 1-2 1.8h-5.2a2 2 0 0 1-2-1.8Z" />
+      <path d="M5.6 8h12.8" />
+      <path d="M15.5 4.5a3 3 0 0 1-3 3 3 3 0 0 1 3-3Z" />
     </svg>
   )
 }

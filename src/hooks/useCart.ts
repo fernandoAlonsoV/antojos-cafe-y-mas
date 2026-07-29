@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { menu } from '../data/menu'
-import type { CartLine, MenuItem } from '../types'
+import type { CartLine, MenuItem, Size } from '../types'
 import { business } from '../config'
 
-const STORAGE_KEY = 'antojos-cart-v1'
+const STORAGE_KEY = 'antojos-cart-v2'
 
 type StoredCart = Record<string, number>
+
+export function lineKey(item: MenuItem, size: Size): string {
+  return `${item.id}|${size.oz}`
+}
+
+const catalog = new Map<string, { item: MenuItem; size: Size }>(
+  menu.flatMap((item) => item.sizes.map((size) => [lineKey(item, size), { item, size }] as const)),
+)
 
 function readStoredCart(): StoredCart {
   try {
@@ -14,9 +22,9 @@ function readStoredCart(): StoredCart {
     const parsed: unknown = JSON.parse(raw)
     if (typeof parsed !== 'object' || parsed === null) return {}
     const result: StoredCart = {}
-    for (const [id, quantity] of Object.entries(parsed as Record<string, unknown>)) {
-      if (typeof quantity === 'number' && quantity > 0 && menu.some((item) => item.id === id)) {
-        result[id] = Math.floor(quantity)
+    for (const [key, quantity] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof quantity === 'number' && quantity > 0 && catalog.has(key)) {
+        result[key] = Math.floor(quantity)
       }
     }
     return result
@@ -32,32 +40,20 @@ export function useCart() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(quantities))
   }, [quantities])
 
-  const setQuantity = useCallback((item: MenuItem, quantity: number) => {
+  const setQuantity = useCallback((item: MenuItem, size: Size, quantity: number) => {
     setQuantities((current) => {
       const next = { ...current }
-      if (quantity <= 0) delete next[item.id]
-      else next[item.id] = quantity
+      const key = lineKey(item, size)
+      if (quantity <= 0) delete next[key]
+      else next[key] = quantity
       return next
     })
   }, [])
 
-  const add = useCallback(
-    (item: MenuItem, amount = 1) => {
-      setQuantities((current) => {
-        const quantity = (current[item.id] ?? 0) + amount
-        const next = { ...current }
-        if (quantity <= 0) delete next[item.id]
-        else next[item.id] = quantity
-        return next
-      })
-    },
-    [],
-  )
-
-  const remove = useCallback((item: MenuItem) => {
+  const remove = useCallback((item: MenuItem, size: Size) => {
     setQuantities((current) => {
       const next = { ...current }
-      delete next[item.id]
+      delete next[lineKey(item, size)]
       return next
     })
   }, [])
@@ -66,14 +62,17 @@ export function useCart() {
 
   const lines = useMemo<CartLine[]>(
     () =>
-      menu
-        .filter((item) => quantities[item.id] > 0)
-        .map((item) => ({ item, quantity: quantities[item.id] })),
+      menu.flatMap((item) =>
+        item.sizes
+          .map((size) => ({ key: lineKey(item, size), item, size }))
+          .filter((line) => quantities[line.key] > 0)
+          .map((line) => ({ ...line, quantity: quantities[line.key] })),
+      ),
     [quantities],
   )
 
   const count = lines.reduce((total, line) => total + line.quantity, 0)
-  const subtotal = lines.reduce((total, line) => total + line.quantity * line.item.price, 0)
+  const subtotal = lines.reduce((total, line) => total + line.quantity * line.size.price, 0)
   const shipping = count > 0 ? business.shippingCost : 0
 
   return {
@@ -83,7 +82,6 @@ export function useCart() {
     subtotal,
     shipping,
     total: subtotal + shipping,
-    add,
     setQuantity,
     remove,
     clear,
