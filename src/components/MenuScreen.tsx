@@ -10,7 +10,7 @@ import {
   HeartIcon,
   HotDrinkIcon,
   LeafIcon,
-  MenuIcon,
+  // MenuIcon,
 } from './Icons'
 import { QuantityStepper } from './QuantityStepper'
 
@@ -43,8 +43,9 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
     <div className="screen">
       <header className="topbar">
         <button type="button" className="topbar__icon" aria-label="Menú">
-          <MenuIcon className="icon" />
+          {/* <MenuIcon className="icon" /> */}
         </button>
+        {/* logo */}
         <img className="topbar__logo" src="icons/logo.svg" alt={business.name} />
         <button
           type="button"
@@ -56,9 +57,9 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
           {count > 0 ? <span className="badge">{count}</span> : null}
         </button>
       </header>
-
+      {/* banner */}
       <div className="hero">
-        <img src="products/moka-frappe.svg" alt="Frappé de la casa" />
+        <img src="products/banner-440x220px.webp" alt="Frappé de la casa" />
       </div>
 
       <section className="welcome">

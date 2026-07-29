@@ -14,7 +14,7 @@ export const menu: MenuItem[] = [
     price: 65,
     category: 'frias',
     emoji: '☕',
-    image: 'products/moka-frappe.svg',
+    image: 'products/producto-mid-240-400x500px.webp',
   },
   {
     id: 'cafe-frappe',
@@ -23,7 +23,7 @@ export const menu: MenuItem[] = [
     price: 60,
     category: 'frias',
     emoji: '🥤',
-    image: 'products/cafe-frappe.svg',
+    image: 'products/producto-small-267x-20y-350x350px.webp',
   },
   {
     id: 'cookies-cream',

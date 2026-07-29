@@ -8,9 +8,10 @@
   --green-dark: #4a5a3b;
   --line: #e2d7c1;
   --radius: 18px;
+  --radius-banner: 10px;
   --shadow: 0 8px 22px rgba(74, 55, 40, 0.08);
 
-  font-family: 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
   color: var(--brown);
   background: var(--cream);
   -webkit-font-smoothing: antialiased;
