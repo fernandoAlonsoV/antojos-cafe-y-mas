@@ -79,8 +79,8 @@
 
 /* Hero -------------------------------------------------------------- */
 .hero {
-  margin: 4px 12px 0;
-  border-radius: var(--radius);
+  margin: 4px 0 0;
+  border-radius: var(--radius-banner);
   overflow: hidden;
   background: var(--cream-deep);
 }
@@ -150,7 +150,6 @@
 /* Tabs -------------------------------------------------------------- */
 .tabs {
   display: flex;
-  justify-content: center;
   gap: 6px;
   padding: 0 12px 16px;
   overflow-x: auto;
