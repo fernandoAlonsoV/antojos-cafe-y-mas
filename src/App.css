@@ -245,9 +245,40 @@
   color: var(--brown-soft);
 }
 
-.item__actions {
+.category-note {
+  margin: -6px 16px 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--brown-soft);
+}
+
+.sizes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.size-row {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.size-row__label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--brown-soft);
+}
+
+.size-row__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
 }
 
 /* Stepper ----------------------------------------------------------- */
@@ -392,8 +423,14 @@
   min-width: 0;
 }
 
+.cart-line__size {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--brown-soft);
+}
+
 .cart-line__name {
-  margin: 2px 0 10px;
+  margin: 2px 0 2px;
   font-size: 15px;
   letter-spacing: 0.4px;
 }
@@ -457,6 +494,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
+  width: calc(100% - 24px);
   margin: 14px 12px 0;
   padding: 14px 18px;
   border-radius: 14px;
@@ -486,7 +524,6 @@
   border-color: var(--green);
   color: var(--green);
   letter-spacing: 1px;
-  width: calc(100% - 24px);
 }
 
 .button--disabled {
@@ -497,6 +534,68 @@
 .icon--whatsapp {
   width: 26px;
   height: 26px;
+}
+
+/* Checkout form ------------------------------------------------------ */
+.checkout-intro {
+  margin: 6px 16px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--brown-soft);
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+  margin: 16px 12px 0;
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown);
+}
+
+.field__input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--cream-card);
+  color: var(--brown);
+  font: inherit;
+  font-size: 15px;
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+}
+
+.field__input--area {
+  resize: vertical;
+  min-height: 78px;
+}
+
+.field__input--error {
+  border-color: #b4553f;
+}
+
+.field__error {
+  font-size: 12px;
+  color: #b4553f;
+}
+
+.form .totals,
+.form .button {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Install prompt ------------------------------------------------------ */

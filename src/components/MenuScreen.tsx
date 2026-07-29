@@ -1,16 +1,21 @@
 import { useState } from 'react'
+import type { ReactElement } from 'react'
 import { business } from '../config'
 import { categories, menu } from '../data/menu'
-import { formatPrice } from '../lib/whatsapp'
-import type { CategoryId, MenuItem } from '../types'
+import { lineKey } from '../hooks/useCart'
+import { formatPrice, sizeLabel } from '../lib/whatsapp'
+import type { CategoryIcon, CategoryId, MenuItem, Size } from '../types'
 import {
   BagIcon,
-  CakeIcon,
-  ColdDrinkIcon,
+  BirthdayIcon,
+  CerealIcon,
   HeartIcon,
   HotDrinkIcon,
   LeafIcon,
-  // MenuIcon,
+  MatchaIcon,
+  MilkshakeIcon,
+  RefresherIcon,
+  SmoothieIcon,
 } from './Icons'
 import { QuantityStepper } from './QuantityStepper'
 
@@ -18,14 +23,18 @@ interface Props {
   quantities: Record<string, number>
   count: number
   subtotal: number
-  onSetQuantity: (item: MenuItem, quantity: number) => void
+  onSetQuantity: (item: MenuItem, size: Size, quantity: number) => void
   onOpenCart: () => void
 }
 
-const categoryIcons = {
-  cold: ColdDrinkIcon,
-  hot: HotDrinkIcon,
-  cake: CakeIcon,
+const categoryIcons: Record<CategoryIcon, (props: { className?: string }) => ReactElement> = {
+  coffee: HotDrinkIcon,
+  matcha: MatchaIcon,
+  cereal: CerealIcon,
+  birthday: BirthdayIcon,
+  smoothie: SmoothieIcon,
+  milkshake: MilkshakeIcon,
+  refresher: RefresherIcon,
 }
 
 const features = [
@@ -36,15 +45,14 @@ const features = [
 ]
 
 export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenCart }: Props) {
-  const [active, setActive] = useState<CategoryId>('frias')
+  const [active, setActive] = useState<CategoryId>('cafe-lattes')
+  const category = categories.find((option) => option.id === active)
   const items = menu.filter((item) => item.category === active)
 
   return (
     <div className="screen">
       <header className="topbar">
-        <button type="button" className="topbar__icon" aria-label="Menú">
-          {/* <MenuIcon className="icon" /> */}
-        </button>
+        <button type="button" className="topbar__icon" aria-label="Menú" />
         {/* logo */}
         <img className="topbar__logo" src="icons/logo.svg" alt={business.name} />
         <button
@@ -59,7 +67,7 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
       </header>
       {/* banner */}
       <div className="hero">
-        <img src="products/banner-440x220px.webp" alt="Frappé de la casa" />
+        <img src="products/banner-440x220px.webp" alt="Bebidas de la casa" />
       </div>
 
       <section className="welcome">
@@ -78,23 +86,25 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
       </h2>
 
       <nav className="tabs" aria-label="Categorías">
-        {categories.map((category) => {
-          const Icon = categoryIcons[category.icon]
-          const isActive = category.id === active
+        {categories.map((option) => {
+          const Icon = categoryIcons[option.icon]
+          const isActive = option.id === active
           return (
             <button
-              key={category.id}
+              key={option.id}
               type="button"
               className={`tab${isActive ? ' tab--active' : ''}`}
               aria-pressed={isActive}
-              onClick={() => setActive(category.id)}
+              onClick={() => setActive(option.id)}
             >
               <Icon className="icon" />
-              {category.label}
+              {option.label}
             </button>
           )
         })}
       </nav>
+
+      {category?.note ? <p className="category-note">{category.note}</p> : null}
 
       <ul className="items">
         {items.map((item) => (
@@ -103,24 +113,34 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
             <div className="item__body">
               <div className="item__head">
                 <h3 className="item__name">{item.name.toUpperCase()}</h3>
-                <span className="item__price">{formatPrice(item.price)}</span>
+                {item.sizes.length === 1 ? (
+                  <span className="item__price">{formatPrice(item.sizes[0].price)}</span>
+                ) : null}
               </div>
-              <p className="item__description">{item.description}</p>
-              <div className="item__actions">
-                <QuantityStepper
-                  label={item.name}
-                  quantity={quantities[item.id] ?? 0}
-                  onChange={(quantity) => onSetQuantity(item, quantity)}
-                />
-              </div>
+              {item.description ? <p className="item__description">{item.description}</p> : null}
+              <ul className="sizes">
+                {item.sizes.map((size) => (
+                  <li key={size.oz} className="size-row">
+                    <span className="size-row__label">
+                      {sizeLabel(size)}
+                      {item.sizes.length > 1 ? (
+                        <span className="size-row__price">{formatPrice(size.price)}</span>
+                      ) : null}
+                    </span>
+                    <QuantityStepper
+                      label={`${item.name} ${sizeLabel(size)}`}
+                      quantity={quantities[lineKey(item, size)] ?? 0}
+                      onChange={(quantity) => onSetQuantity(item, size, quantity)}
+                    />
+                  </li>
+                ))}
+              </ul>
             </div>
           </li>
         ))}
       </ul>
 
-      {count > 0 ? (
-        <div className="cart-bar-space" aria-hidden="true" />
-      ) : null}
+      {count > 0 ? <div className="cart-bar-space" aria-hidden="true" /> : null}
 
       <ul className="features">
         {features.map((feature) => (
@@ -135,7 +155,10 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
         ))}
       </ul>
 
-      <p className="footer-note">GRACIAS POR APOYAR LO LOCAL ♥</p>
+      <p className="footer-note">{business.payments.toUpperCase()} ♥</p>
+      <p className="footer-note footer-note--soft">
+        {business.location} · {business.instagram}
+      </p>
 
       {count > 0 ? (
         <button type="button" className="cart-bar" onClick={onOpenCart}>

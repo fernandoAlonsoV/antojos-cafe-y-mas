@@ -1,30 +1,44 @@
 import { business } from '../config'
-import type { CartLine } from '../types'
+import type { CartLine, CustomerInfo, Size } from '../types'
 
 export function formatPrice(value: number): string {
-  return `${business.currency}${value}`
+  return `${business.currency}${value.toFixed(2)}`
 }
 
-export function buildOrderMessage(lines: CartLine[], subtotal: number, shipping: number): string {
-  const items = lines
-    .map((line) => `${line.item.emoji} ${line.item.name.toUpperCase()} x${line.quantity}   ${formatPrice(line.quantity * line.item.price)}`)
-    .join('\n')
+export function sizeLabel(size: Size): string {
+  return size.label ? `${size.label} ${size.oz} oz` : `${size.oz} oz`
+}
+
+export function buildOrderMessage(
+  lines: CartLine[],
+  subtotal: number,
+  shipping: number,
+  customer: CustomerInfo,
+): string {
+  const items = lines.map(
+    (line) =>
+      `${line.item.emoji} ${line.item.name.toUpperCase()} (${sizeLabel(line.size)}) x${line.quantity}   ${formatPrice(
+        line.quantity * line.size.price,
+      )}`,
+  )
+
+  const totals = [`Subtotal: ${formatPrice(subtotal)}`]
+  if (shipping > 0) totals.push(`Envío: ${formatPrice(shipping)}`)
+  totals.push(`TOTAL: ${formatPrice(subtotal + shipping)}`)
 
   return [
     '¡Hola! Quiero hacer el siguiente pedido:',
     '',
-    items,
+    ...items,
     '',
     '------------------------------',
     '',
-    `Subtotal: ${formatPrice(subtotal)}`,
-    `Envío: ${formatPrice(shipping)}`,
-    `TOTAL: ${formatPrice(subtotal + shipping)}`,
+    ...totals,
     '',
-    'Nombre: ______________',
-    'Teléfono: ______________',
-    'Dirección: ______________',
-    '¿Alguna nota adicional? ______________',
+    `Nombre: ${customer.name}`,
+    `Teléfono: ${customer.phone}`,
+    `Dirección: ${customer.address}`,
+    `Notas: ${customer.notes.trim() || 'Sin notas adicionales'}`,
     '',
     '¡Gracias!',
   ].join('\n')

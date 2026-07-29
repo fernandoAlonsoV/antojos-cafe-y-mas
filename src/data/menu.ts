@@ -1,91 +1,159 @@
-import type { Category, MenuItem } from '../types'
+import type { Category, MenuItem, Size } from '../types'
 
 export const categories: Category[] = [
-  { id: 'frias', label: 'Bebidas Frías', icon: 'cold' },
-  { id: 'calientes', label: 'Bebidas Calientes', icon: 'hot' },
-  { id: 'dulces', label: 'Antojos Dulces', icon: 'cake' },
+  { id: 'cafe-lattes', label: 'Café Lattes', icon: 'coffee', note: 'Vaso de 20 oz' },
+  { id: 'matcha', label: 'Matcha', icon: 'matcha', note: 'Vaso de 20 oz' },
+  {
+    id: 'cereal-lattes',
+    label: 'Cereal Lattes',
+    icon: 'cereal',
+    note: 'Tu cereal favorito en versión latte · 20 oz · también en Matcha',
+  },
+  { id: 'birthday-lattes', label: 'Birthday Lattes', icon: 'birthday', note: 'Dulce, colorido y perfecto para celebrar' },
+  { id: 'birthday-matcha', label: 'Birthday Matcha', icon: 'birthday', note: 'Alegre, cremoso y lleno de sabor' },
+  { id: 'smoothies', label: 'Smoothie', icon: 'smoothie', note: 'Vaso de 16 oz' },
+  { id: 'kids', label: 'Kids Menú', icon: 'milkshake', note: 'Milkshakes en vaso de 16 oz' },
+  { id: 'refreshers', label: 'Refreshers', icon: 'refresher', note: 'Vaso de 16 oz' },
 ]
 
+const PHOTO = 'products/producto-small-267x-20y-350x350px.webp'
+
+const oz20 = (price: number): Size[] => [{ oz: 20, price }]
+const oz16 = (price: number): Size[] => [{ oz: 16, price }]
+const mini10y20: Size[] = [
+  { oz: 10, price: 5, label: 'Mini' },
+  { oz: 20, price: 7 },
+]
+
+const cafeLattes = [
+  'Vanilla latte',
+  'Rompope latte',
+  'Biscoff latte',
+  'Caramel latte',
+  'Nutella latte',
+  'Banana latte',
+  'Banana Biscoff latte',
+  'Mazapán latte',
+  'Cookies & cream latte',
+  'Ferrero Rocher latte',
+  'Duvalín latte',
+]
+
+const matchas = [
+  'Matcha latte',
+  'Vanilla Matcha',
+  'Double Matcha',
+  'Banana Matcha',
+  'Banana Biscoff Matcha',
+  'Strawberry Matcha',
+  'Blueberry Matcha',
+  'Lavander Matcha',
+  'Cookies & cream Matcha',
+]
+
+const cerealLattes: { name: string; description: string }[] = [
+  { name: 'Marshmallow Cereal Latte', description: 'Dulce, cremoso y lleno de nostalgia.' },
+  { name: 'Cocoa Cereal Latte', description: 'Intenso, chocolatoso y reconfortante.' },
+  { name: 'Cinnamon Toast Cereal Latte', description: 'Suave, especiado y perfecto para ti.' },
+  { name: 'Fruity Pebbles Cereal Latte', description: 'Divertido, afrutado y lleno de color.' },
+]
+
+const milkshakes = [
+  'Strawberry Milkshake',
+  'Chocolate Milkshake',
+  'Cookies & Cream Milkshake',
+  'Banana Milkshake',
+  'Nutella Milkshake',
+  'Biscoff Milkshake',
+]
+
+function slug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
 export const menu: MenuItem[] = [
-  {
-    id: 'moka-frappe',
-    name: 'Moka Frappé',
-    description: 'Café, chocolate, leche y un toque de amor.',
-    price: 65,
-    category: 'frias',
+  ...cafeLattes.map<MenuItem>((name) => ({
+    id: slug(name),
+    name,
+    category: 'cafe-lattes',
     emoji: '☕',
-    image: 'products/producto-mid-240-400x500px.webp',
+    image: PHOTO,
+    sizes: oz20(6),
+  })),
+  ...matchas.map<MenuItem>((name) => ({
+    id: slug(name),
+    name,
+    category: 'matcha',
+    emoji: '🍵',
+    image: PHOTO,
+    sizes: oz20(7),
+  })),
+  ...cerealLattes.map<MenuItem>(({ name, description }) => ({
+    id: slug(name),
+    name,
+    description,
+    category: 'cereal-lattes',
+    emoji: '🥣',
+    image: PHOTO,
+    sizes: oz20(7),
+  })),
+  {
+    id: 'birthday-latte',
+    name: 'Birthday Latte',
+    description: 'Café cremoso con sabor a pastel de cumpleaños.',
+    category: 'birthday-lattes',
+    emoji: '🎂',
+    image: PHOTO,
+    sizes: mini10y20,
   },
   {
-    id: 'cafe-frappe',
-    name: 'Café Frappé',
-    description: 'Café, leche, hielo y un toque especial.',
-    price: 60,
-    category: 'frias',
+    id: 'birthday-matcha-drink',
+    name: 'Birthday Matcha',
+    description: 'Matcha cremoso con sabor a pastel de cumpleaños.',
+    category: 'birthday-matcha',
+    emoji: '🎉',
+    image: PHOTO,
+    sizes: mini10y20,
+  },
+  {
+    id: 'berry-smoothie',
+    name: 'Berry Smoothie',
+    description: 'Frutos rojos, cremoso y refrescante.',
+    category: 'smoothies',
+    emoji: '🍓',
+    image: PHOTO,
+    sizes: oz16(5),
+  },
+  ...milkshakes.map<MenuItem>((name) => ({
+    id: slug(name),
+    name,
+    category: 'kids',
     emoji: '🥤',
-    image: 'products/producto-small-267x-20y-350x350px.webp',
+    image: PHOTO,
+    sizes: oz16(5),
+  })),
+  {
+    id: 'dragon-fruit-lemonade',
+    name: 'Dragón Fruit Lemonade',
+    description: 'Limonada afrutada y muy refrescante.',
+    category: 'refreshers',
+    emoji: '🐉',
+    image: PHOTO,
+    sizes: oz16(5),
   },
   {
-    id: 'cookies-cream',
-    name: 'Cookies & Cream',
-    description: 'Galleta, crema y café para endulzar tu día.',
-    price: 65,
-    category: 'frias',
-    emoji: '🍪',
-    image: 'products/cookies-cream.svg',
-  },
-  {
-    id: 'capuchino',
-    name: 'Capuchino',
-    description: 'Espresso, leche vaporizada y espuma cremosa.',
-    price: 45,
-    category: 'calientes',
-    emoji: '☕',
-    image: 'products/capuchino.svg',
-  },
-  {
-    id: 'latte-vainilla',
-    name: 'Latte de Vainilla',
-    description: 'Café suave con leche y vainilla natural.',
-    price: 50,
-    category: 'calientes',
-    emoji: '☕',
-    image: 'products/latte-vainilla.svg',
-  },
-  {
-    id: 'chocolate-caliente',
-    name: 'Chocolate Caliente',
-    description: 'Chocolate espeso, perfecto para consentirte.',
-    price: 48,
-    category: 'calientes',
-    emoji: '🍫',
-    image: 'products/chocolate-caliente.svg',
-  },
-  {
-    id: 'cheesecake',
-    name: 'Cheesecake',
-    description: 'Rebanada cremosa con salsa de frutos rojos.',
-    price: 70,
-    category: 'dulces',
-    emoji: '🍰',
-    image: 'products/cheesecake.svg',
-  },
-  {
-    id: 'brownie',
-    name: 'Brownie',
-    description: 'Chocolate intenso, suave por dentro.',
-    price: 45,
-    category: 'dulces',
-    emoji: '🍫',
-    image: 'products/brownie.svg',
-  },
-  {
-    id: 'pay-limon',
-    name: 'Pay de Limón',
-    description: 'Fresco, dulce y con base de galleta.',
-    price: 55,
-    category: 'dulces',
+    id: 'lemonade',
+    name: 'Lemonade',
+    description: 'Limonada natural bien fría.',
+    category: 'refreshers',
     emoji: '🍋',
-    image: 'products/pay-limon.svg',
+    image: PHOTO,
+    sizes: oz16(5),
   },
 ]
