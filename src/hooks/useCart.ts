@@ -84,6 +84,37 @@ export function useCart() {
     [],
   )
 
+  /** Reemplaza una línea con otra configuración; si coincide con otra línea existente, se suman. */
+  const update = useCallback(
+    (
+      key: string,
+      item: MenuItem,
+      size: Size,
+      customization: Customization,
+      quantity: number,
+    ) => {
+      const nextKey = lineKey(item.id, size.oz, customization)
+      setStored((current) => {
+        if (quantity <= 0) return current.filter((line) => line.key !== key)
+        const duplicate = current.find((line) => line.key === nextKey && line.key !== key)
+        return current
+          .filter((line) => line.key === key || line.key !== nextKey)
+          .map((line) =>
+            line.key === key
+              ? {
+                  key: nextKey,
+                  itemId: item.id,
+                  sizeOz: size.oz,
+                  customization,
+                  quantity: quantity + (duplicate?.quantity ?? 0),
+                }
+              : line,
+          )
+      })
+    },
+    [],
+  )
+
   const setQuantity = useCallback((key: string, quantity: number) => {
     setStored((current) =>
       quantity <= 0
@@ -114,6 +145,7 @@ export function useCart() {
     shipping,
     total: subtotal + shipping,
     add,
+    update,
     setQuantity,
     remove,
     clear,

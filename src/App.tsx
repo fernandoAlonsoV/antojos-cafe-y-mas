@@ -34,6 +34,7 @@ export default function App() {
         shipping={cart.shipping}
         total={cart.total}
         onSetQuantity={cart.setQuantity}
+        onUpdate={cart.update}
         onRemove={cart.remove}
         onBack={() => setScreen('menu')}
         onContinue={() => setScreen('checkout')}

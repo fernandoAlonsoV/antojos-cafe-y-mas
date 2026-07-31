@@ -171,7 +171,7 @@ export function MenuScreen({ count, subtotal, onAdd, onOpenCart }: Props) {
       ) : null}
 
       {customizing ? (
-        <CustomizeSheet item={customizing} onAdd={onAdd} onClose={() => setCustomizing(null)} />
+        <CustomizeSheet item={customizing} onSubmit={onAdd} onClose={() => setCustomizing(null)} />
       ) : null}
     </div>
   )

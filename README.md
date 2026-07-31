@@ -56,6 +56,10 @@ options: { sweetener: true, milk: false } // limonadas: endulzante sí, leche no
 Si un producto tiene un solo tamaño, queda seleccionado por defecto y no se muestra el selector; el card
 siempre indica “Desde” con el precio más bajo.
 
+Desde “Mi pedido”, el botón **Editar** de cada línea reabre el mismo panel con los valores ya cargados
+para cambiar tamaño, endulzante, leche, notas o cantidad; si la nueva configuración coincide con otra
+línea del carrito, ambas se suman en una sola.
+
 El carrito guarda una línea por producto + tamaño + personalización en `localStorage`, así que la misma
 bebida con distinta leche o notas son líneas separadas; los datos del cliente se recuerdan para el
 siguiente pedido.
