@@ -1,4 +1,4 @@
-import type { Category, MenuItem, Size } from '../types'
+import type { Category, ItemOptions, MenuItem, Size } from '../types'
 
 export const categories: Category[] = [
   { id: 'cafe-lattes', label: 'Café Lattes', icon: 'coffee', note: 'Vaso de 20 oz' },
@@ -17,6 +17,11 @@ export const categories: Category[] = [
 ]
 
 const PHOTO = 'products/producto-small-267x-20y-350x350px.webp'
+
+/** Bebidas de leche: se puede elegir endulzante y tipo de leche. */
+const WITH_MILK: ItemOptions = { sweetener: true, milk: true }
+/** Bebidas sin leche (limonadas): sólo endulzante. */
+const NO_MILK: ItemOptions = { sweetener: true, milk: false }
 
 const oz20 = (price: number): Size[] => [{ oz: 20, price }]
 const oz16 = (price: number): Size[] => [{ oz: 16, price }]
@@ -85,6 +90,7 @@ export const menu: MenuItem[] = [
     emoji: '☕',
     image: PHOTO,
     sizes: oz20(6),
+    options: WITH_MILK,
   })),
   ...matchas.map<MenuItem>((name) => ({
     id: slug(name),
@@ -93,6 +99,7 @@ export const menu: MenuItem[] = [
     emoji: '🍵',
     image: PHOTO,
     sizes: oz20(7),
+    options: WITH_MILK,
   })),
   ...cerealLattes.map<MenuItem>(({ name, description }) => ({
     id: slug(name),
@@ -102,6 +109,7 @@ export const menu: MenuItem[] = [
     emoji: '🥣',
     image: PHOTO,
     sizes: oz20(7),
+    options: WITH_MILK,
   })),
   {
     id: 'birthday-latte',
@@ -111,6 +119,7 @@ export const menu: MenuItem[] = [
     emoji: '🎂',
     image: PHOTO,
     sizes: mini10y20,
+    options: WITH_MILK,
   },
   {
     id: 'birthday-matcha-drink',
@@ -120,6 +129,7 @@ export const menu: MenuItem[] = [
     emoji: '🎉',
     image: PHOTO,
     sizes: mini10y20,
+    options: WITH_MILK,
   },
   {
     id: 'berry-smoothie',
@@ -129,6 +139,7 @@ export const menu: MenuItem[] = [
     emoji: '🍓',
     image: PHOTO,
     sizes: oz16(5),
+    options: WITH_MILK,
   },
   ...milkshakes.map<MenuItem>((name) => ({
     id: slug(name),
@@ -137,6 +148,7 @@ export const menu: MenuItem[] = [
     emoji: '🥤',
     image: PHOTO,
     sizes: oz16(5),
+    options: WITH_MILK,
   })),
   {
     id: 'dragon-fruit-lemonade',
@@ -146,6 +158,7 @@ export const menu: MenuItem[] = [
     emoji: '🐉',
     image: PHOTO,
     sizes: oz16(5),
+    options: NO_MILK,
   },
   {
     id: 'lemonade',
@@ -155,5 +168,6 @@ export const menu: MenuItem[] = [
     emoji: '🍋',
     image: PHOTO,
     sizes: oz16(5),
+    options: NO_MILK,
   },
 ]

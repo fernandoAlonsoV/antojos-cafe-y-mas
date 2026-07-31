@@ -4,9 +4,11 @@ interface Props {
   quantity: number
   onChange: (quantity: number) => void
   label: string
+  /** Cantidad mínima alcanzable con el botón de menos (0 permite eliminar). */
+  minimum?: number
 }
 
-export function QuantityStepper({ quantity, onChange, label }: Props) {
+export function QuantityStepper({ quantity, onChange, label, minimum = 0 }: Props) {
   return (
     <div className="stepper">
       <button
@@ -14,7 +16,7 @@ export function QuantityStepper({ quantity, onChange, label }: Props) {
         className="stepper__button"
         aria-label={`Quitar uno de ${label}`}
         onClick={() => onChange(quantity - 1)}
-        disabled={quantity <= 0}
+        disabled={quantity <= minimum}
       >
         <MinusIcon className="icon" />
       </button>
