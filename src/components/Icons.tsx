@@ -146,6 +146,110 @@ export function LeafIcon({ className }: IconProps) {
   )
 }
 
+export function SlidersIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M4 8h4M12 8h8M4 16h10M18 16h2" />
+      <circle cx="10" cy="8" r="2" />
+      <circle cx="16" cy="16" r="2" />
+    </svg>
+  )
+}
+
+export function CloseIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  )
+}
+
+export function BanIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <circle cx="12" cy="12" r="8" />
+      <path d="M7 17 17 7" />
+    </svg>
+  )
+}
+
+export function SugarIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M4 13h16a8 8 0 0 1-8 6 8 8 0 0 1-8-6Z" />
+      <path d="M8.6 10.4a1.5 1.5 0 1 0 0-.1M12 8.6a1.5 1.5 0 1 0 0-.1M15.4 10.6a1.5 1.5 0 1 0 0-.1" />
+    </svg>
+  )
+}
+
+export function HoneyIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M6 5h10M11 5v4" />
+      <path d="M6.5 9h9l-1 4h-7Z" />
+      <path d="M11 13v3.5a2 2 0 1 0 2.5 1.9" />
+    </svg>
+  )
+}
+
+export function SyrupIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M9 4h4v3H9z" />
+      <path d="M8 7h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
+      <path d="M16 9h2v3h-2" />
+    </svg>
+  )
+}
+
+export function CowIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M7 9c-1.6 0-2.6-1-3-2.6C6 6 7.2 7 7.6 9M17 9c1.6 0 2.6-1 3-2.6C18 6 16.8 7 16.4 9" />
+      <path d="M7 9h10v5a5 5 0 0 1-10 0Z" />
+      <path d="M10 12.5h.01M14 12.5h.01M10.5 16.5h3" />
+    </svg>
+  )
+}
+
+export function BottleIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M10 3h4v3l1.6 2.6A4 4 0 0 1 16 10.7V19a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-8.3a4 4 0 0 1 .4-1.7L10 6Z" />
+      <path d="M8 13h8" />
+    </svg>
+  )
+}
+
+export function OatIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M12 21V7" />
+      <path d="M12 9c-2.4 0-3.6-1.4-3.6-3.6C10.8 5.4 12 6.8 12 9Zm0 0c2.4 0 3.6-1.4 3.6-3.6C13.2 5.4 12 6.8 12 9Z" />
+      <path d="M12 14c-2.4 0-3.6-1.4-3.6-3.6C10.8 10.4 12 11.8 12 14Zm0 0c2.4 0 3.6-1.4 3.6-3.6C13.2 10.4 12 11.8 12 14Z" />
+    </svg>
+  )
+}
+
+export function AlmondIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M12 4c3.5 3 5 6.4 5 9.2A5 5 0 0 1 7 13.2C7 10.4 8.5 7 12 4Z" />
+      <path d="M12 8v9" />
+    </svg>
+  )
+}
+
+export function SoyIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
+      <path d="M6 15a4 4 0 0 1 4-4h1a4 4 0 0 1 0 8h-1a4 4 0 0 1-4-4Z" />
+      <path d="M13 9a4 4 0 0 1 4-4 4 4 0 0 1-4 4Z" />
+      <path d="M9.5 15h.01M13 17h.01" />
+    </svg>
+  )
+}
+
 export function HeartIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>

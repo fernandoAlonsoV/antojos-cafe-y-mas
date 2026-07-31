@@ -4,9 +4,10 @@ Menú digital instalable (PWA) pensado para abrirse desde un código QR: se ve y
 nativa (pantalla completa, icono en la pantalla de inicio, funciona sin conexión) **sin pasar por ninguna
 tienda de aplicaciones**.
 
-Flujo: el cliente escanea el QR → elige productos y tamaño (10/16/20 oz) → revisa su pedido → llena sus
-datos (nombre, teléfono, dirección y notas) → el botón **Enviar pedido por WhatsApp** abre WhatsApp con el
-mensaje del pedido ya redactado, incluyendo tamaños, totales y los datos del cliente.
+Flujo: el cliente escanea el QR → pulsa **Personalizar** en el producto → en el panel inferior elige
+endulzado, endulzante, leche, tamaño (10/16/20 oz), notas y cantidad → revisa su pedido → llena sus datos
+(nombre, teléfono, dirección y notas) → el botón **Enviar pedido por WhatsApp** abre WhatsApp con el
+mensaje del pedido ya redactado, incluyendo personalización, tamaños, totales y los datos del cliente.
 
 El menú tiene 8 categorías: Café Lattes, Matcha, Cereal Lattes, Birthday Lattes, Birthday Matcha,
 Smoothie, Kids Menú y Refreshers.
@@ -31,7 +32,8 @@ npm run assets   # regenera los iconos PNG de la PWA a partir de public/icons/lo
 | Qué | Dónde |
 | --- | --- |
 | Número de WhatsApp, nombre, costo de envío | `src/config.ts` |
-| Productos, descripciones, categorías, tamaños y precios por tamaño | `src/data/menu.ts` |
+| Productos, descripciones, categorías, tamaños, precios y qué se puede personalizar | `src/data/menu.ts` |
+| Endulzantes, tipos de leche y límite de caracteres de las notas | `src/data/options.ts` |
 | Fotos de producto | `public/products/` (agrega tus `.webp`/`.jpg` y ajusta `image` en `src/data/menu.ts`) |
 | Logo e iconos de la app | `public/icons/` |
 | Colores y tipografía | variables CSS en `src/index.css` |
@@ -45,8 +47,18 @@ Cada producto define sus tamaños en `sizes`, con el precio de cada uno:
 { id: 'birthday-latte', name: 'Birthday Latte', sizes: [{ oz: 10, price: 5, label: 'Mini' }, { oz: 20, price: 7 }] }
 ```
 
-El carrito guarda una línea por producto + tamaño (clave `id|oz`) en `localStorage`, y los datos del
-cliente se recuerdan para el siguiente pedido.
+Y qué admite personalizar con `options` (lo que esté en `false` no aparece en el panel):
+
+```ts
+options: { sweetener: true, milk: false } // limonadas: endulzante sí, leche no
+```
+
+Si un producto tiene un solo tamaño, queda seleccionado por defecto y no se muestra el selector; el card
+siempre indica “Desde” con el precio más bajo.
+
+El carrito guarda una línea por producto + tamaño + personalización en `localStorage`, así que la misma
+bebida con distinta leche o notas son líneas separadas; los datos del cliente se recuerdan para el
+siguiente pedido.
 
 ## Publicar y generar el QR
 

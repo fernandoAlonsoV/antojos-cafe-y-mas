@@ -2,9 +2,8 @@ import { useState } from 'react'
 import type { ReactElement } from 'react'
 import { business } from '../config'
 import { categories, menu } from '../data/menu'
-import { lineKey } from '../hooks/useCart'
-import { formatPrice, sizeLabel } from '../lib/whatsapp'
-import type { CategoryIcon, CategoryId, MenuItem, Size } from '../types'
+import { formatPrice } from '../lib/whatsapp'
+import type { CategoryIcon, CategoryId, Customization, MenuItem, Size } from '../types'
 import {
   BagIcon,
   BirthdayIcon,
@@ -15,15 +14,15 @@ import {
   MatchaIcon,
   MilkshakeIcon,
   RefresherIcon,
+  SlidersIcon,
   SmoothieIcon,
 } from './Icons'
-import { QuantityStepper } from './QuantityStepper'
+import { CustomizeSheet } from './CustomizeSheet'
 
 interface Props {
-  quantities: Record<string, number>
   count: number
   subtotal: number
-  onSetQuantity: (item: MenuItem, size: Size, quantity: number) => void
+  onAdd: (item: MenuItem, size: Size, customization: Customization, quantity: number) => void
   onOpenCart: () => void
 }
 
@@ -44,8 +43,9 @@ const features = [
   { icon: BagIcon, title: 'Empacado', subtitle: 'con cuidado' },
 ]
 
-export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenCart }: Props) {
+export function MenuScreen({ count, subtotal, onAdd, onOpenCart }: Props) {
   const [active, setActive] = useState<CategoryId>('cafe-lattes')
+  const [customizing, setCustomizing] = useState<MenuItem | null>(null)
   const category = categories.find((option) => option.id === active)
   const items = menu.filter((item) => item.category === active)
 
@@ -107,37 +107,36 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
       {category?.note ? <p className="category-note">{category.note}</p> : null}
 
       <ul className="items">
-        {items.map((item) => (
-          <li key={item.id} className="item">
-            <img className="item__image" src={item.image} alt={item.name} loading="lazy" />
-            <div className="item__body">
-              <div className="item__head">
-                <h3 className="item__name">{item.name.toUpperCase()}</h3>
-                {item.sizes.length === 1 ? (
-                  <span className="item__price">{formatPrice(item.sizes[0].price)}</span>
-                ) : null}
+        {items.map((item) => {
+          const from = Math.min(...item.sizes.map((size) => size.price))
+          return (
+            <li key={item.id} className="item">
+              <div className="item__top">
+                <img className="item__image" src={item.image} alt={item.name} loading="lazy" />
+                <div className="item__body">
+                  <h3 className="item__name">{item.name.toUpperCase()}</h3>
+                  {item.description ? (
+                    <p className="item__description">{item.description}</p>
+                  ) : null}
+                </div>
               </div>
-              {item.description ? <p className="item__description">{item.description}</p> : null}
-              <ul className="sizes">
-                {item.sizes.map((size) => (
-                  <li key={size.oz} className="size-row">
-                    <span className="size-row__label">
-                      {sizeLabel(size)}
-                      {item.sizes.length > 1 ? (
-                        <span className="size-row__price">{formatPrice(size.price)}</span>
-                      ) : null}
-                    </span>
-                    <QuantityStepper
-                      label={`${item.name} ${sizeLabel(size)}`}
-                      quantity={quantities[lineKey(item, size)] ?? 0}
-                      onChange={(quantity) => onSetQuantity(item, size, quantity)}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
+              <div className="item__bottom">
+                <span className="item__from">
+                  Desde
+                  <strong>{formatPrice(from)}</strong>
+                </span>
+                <button
+                  type="button"
+                  className="item__customize"
+                  onClick={() => setCustomizing(item)}
+                >
+                  <SlidersIcon className="icon" />
+                  Personalizar
+                </button>
+              </div>
+            </li>
+          )
+        })}
       </ul>
 
       {count > 0 ? <div className="cart-bar-space" aria-hidden="true" /> : null}
@@ -169,6 +168,10 @@ export function MenuScreen({ quantities, count, subtotal, onSetQuantity, onOpenC
           </span>
           <span className="cart-bar__total">{formatPrice(subtotal)}</span>
         </button>
+      ) : null}
+
+      {customizing ? (
+        <CustomizeSheet item={customizing} onAdd={onAdd} onClose={() => setCustomizing(null)} />
       ) : null}
     </div>
   )

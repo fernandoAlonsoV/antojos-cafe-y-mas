@@ -21,10 +21,9 @@ export default function App() {
   const screens = {
     menu: (
       <MenuScreen
-        quantities={cart.quantities}
         count={cart.count}
         subtotal={cart.subtotal}
-        onSetQuantity={cart.setQuantity}
+        onAdd={cart.add}
         onOpenCart={() => setScreen('cart')}
       />
     ),

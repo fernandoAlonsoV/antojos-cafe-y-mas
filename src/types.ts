@@ -33,6 +33,16 @@ export interface Size {
   label?: string
 }
 
+export type SweetenerId = 'azucar-morena' | 'miel' | 'syrups'
+
+export type MilkId = 'entera' | 'deslactosada' | 'avena' | 'almendra' | 'soya'
+
+/** Qué se puede personalizar de un producto; lo que está en false no se muestra. */
+export interface ItemOptions {
+  sweetener: boolean
+  milk: boolean
+}
+
 export interface MenuItem {
   id: string
   name: string
@@ -41,13 +51,32 @@ export interface MenuItem {
   emoji: string
   image: string
   sizes: Size[]
+  options: ItemOptions
+}
+
+export interface Customization {
+  sweetened: boolean
+  /** Sólo aplica si `sweetened` y el producto permite endulzante. */
+  sweetener: SweetenerId | null
+  milk: MilkId | null
+  notes: string
+}
+
+/** Línea tal como se guarda en localStorage. */
+export interface StoredLine {
+  key: string
+  itemId: string
+  sizeOz: number
+  customization: Customization
+  quantity: number
 }
 
 export interface CartLine {
-  /** Clave única de la línea: `${item.id}|${size.oz}`. */
+  /** Firma de producto + tamaño + personalización. */
   key: string
   item: MenuItem
   size: Size
+  customization: Customization
   quantity: number
 }
 

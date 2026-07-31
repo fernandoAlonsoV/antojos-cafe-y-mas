@@ -1,6 +1,6 @@
 import { business } from '../config'
-import { formatPrice, sizeLabel } from '../lib/whatsapp'
-import type { CartLine, MenuItem, Size } from '../types'
+import { customizationSummary, formatPrice, sizeLabel } from '../lib/whatsapp'
+import type { CartLine } from '../types'
 import { BackIcon, LeafIcon, TrashIcon } from './Icons'
 import { OrderTotals } from './OrderTotals'
 import { QuantityStepper } from './QuantityStepper'
@@ -10,8 +10,8 @@ interface Props {
   subtotal: number
   shipping: number
   total: number
-  onSetQuantity: (item: MenuItem, size: Size, quantity: number) => void
-  onRemove: (item: MenuItem, size: Size) => void
+  onSetQuantity: (key: string, quantity: number) => void
+  onRemove: (key: string) => void
   onBack: () => void
   onContinue: () => void
 }
@@ -49,24 +49,29 @@ export function CartScreen({
         <p className="cart-empty">Tu pedido está vacío. ¡Agrega algún antojo! ♥</p>
       ) : (
         <ul className="cart-lines">
-          {lines.map(({ key, item, size, quantity }) => (
+          {lines.map(({ key, item, size, customization, quantity }) => (
             <li key={key} className="cart-line">
               <img className="cart-line__image" src={item.image} alt={item.name} />
               <div className="cart-line__body">
                 <h2 className="cart-line__name">{item.name.toUpperCase()}</h2>
-                <p className="cart-line__size">{sizeLabel(size)}</p>
+                <p className="cart-line__size">
+                  {[sizeLabel(size), ...customizationSummary(item, customization)].join(' · ')}
+                </p>
+                {customization.notes ? (
+                  <p className="cart-line__notes">Nota: {customization.notes}</p>
+                ) : null}
                 <div className="cart-line__row">
                   <span className="cart-line__price">{formatPrice(size.price * quantity)}</span>
                   <QuantityStepper
                     label={`${item.name} ${sizeLabel(size)}`}
                     quantity={quantity}
-                    onChange={(next) => onSetQuantity(item, size, next)}
+                    onChange={(next) => onSetQuantity(key, next)}
                   />
                   <button
                     type="button"
                     className="cart-line__remove"
                     aria-label={`Eliminar ${item.name} ${sizeLabel(size)}`}
-                    onClick={() => onRemove(item, size)}
+                    onClick={() => onRemove(key)}
                   >
                     <TrashIcon className="icon" />
                   </button>
