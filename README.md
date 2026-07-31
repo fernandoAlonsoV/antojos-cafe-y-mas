@@ -31,7 +31,7 @@ npm run assets   # regenera los iconos PNG de la PWA a partir de public/icons/lo
 
 | Qué | Dónde |
 | --- | --- |
-| Número de WhatsApp, nombre, costo de envío | `src/config.ts` |
+| Número de WhatsApp, nombre, costo de envío, punto de entrega en persona | `src/config.ts` |
 | Productos, descripciones, categorías, tamaños, precios y qué se puede personalizar | `src/data/menu.ts` |
 | Endulzantes, tipos de leche y límite de caracteres de las notas | `src/data/options.ts` |
 | Fotos de producto | `public/products/` (agrega tus `.webp`/`.jpg` y ajusta `image` en `src/data/menu.ts`) |
@@ -59,6 +59,14 @@ siempre indica “Desde” con el precio más bajo.
 El carrito guarda una línea por producto + tamaño + personalización en `localStorage`, así que la misma
 bebida con distinta leche o notas son líneas separadas; los datos del cliente se recuerdan para el
 siguiente pedido.
+
+## Entrega
+
+Si `business.shippingCost` es `0` no hay envío a domicilio: el checkout oculta el campo **Dirección** y
+muestra (en el pedido y en el mensaje de WhatsApp) que la entrega es en persona en
+`business.pickupPlace`. Con un costo mayor a 0 vuelve a pedirse la dirección y se cobra el envío.
+
+El pedido se agrupa por categorías tanto en la pantalla “Mi pedido” como en el mensaje de WhatsApp.
 
 ## Publicar y generar el QR
 
