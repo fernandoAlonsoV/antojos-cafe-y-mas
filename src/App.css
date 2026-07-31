@@ -664,6 +664,25 @@
   margin-right: auto;
 }
 
+.cart-line__edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--cream-card);
+  color: var(--brown);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cart-line__edit .icon {
+  width: 14px;
+  height: 14px;
+}
+
 .cart-line__remove {
   border: none;
   background: transparent;

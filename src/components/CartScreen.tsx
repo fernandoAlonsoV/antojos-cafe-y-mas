@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { business } from '../config'
 import { pickupNote, isDelivery } from '../lib/delivery'
 import { customizationSummary, formatPrice, groupByCategory, sizeLabel } from '../lib/whatsapp'
-import type { CartLine } from '../types'
-import { BackIcon, LeafIcon, TrashIcon } from './Icons'
+import type { CartLine, Customization, MenuItem, Size } from '../types'
+import { CustomizeSheet } from './CustomizeSheet'
+import { BackIcon, LeafIcon, SlidersIcon, TrashIcon } from './Icons'
 import { OrderTotals } from './OrderTotals'
 import { QuantityStepper } from './QuantityStepper'
 
@@ -12,6 +14,13 @@ interface Props {
   shipping: number
   total: number
   onSetQuantity: (key: string, quantity: number) => void
+  onUpdate: (
+    key: string,
+    item: MenuItem,
+    size: Size,
+    customization: Customization,
+    quantity: number,
+  ) => void
   onRemove: (key: string) => void
   onBack: () => void
   onContinue: () => void
@@ -23,10 +32,12 @@ export function CartScreen({
   shipping,
   total,
   onSetQuantity,
+  onUpdate,
   onRemove,
   onBack,
   onContinue,
 }: Props) {
+  const [editing, setEditing] = useState<CartLine | null>(null)
   const isEmpty = lines.length === 0
 
   return (
@@ -64,6 +75,17 @@ export function CartScreen({
                     {customization.notes ? (
                       <p className="cart-line__notes">Nota: {customization.notes}</p>
                     ) : null}
+                    <button
+                      type="button"
+                      className="cart-line__edit"
+                      aria-label={`Editar ${item.name} ${sizeLabel(size)}`}
+                      onClick={() =>
+                        setEditing({ key, item, size, customization, quantity })
+                      }
+                    >
+                      <SlidersIcon className="icon" />
+                      Editar
+                    </button>
                     <div className="cart-line__row">
                       <span className="cart-line__price">
                         {formatPrice(size.price * quantity)}
@@ -108,6 +130,22 @@ export function CartScreen({
       </button>
 
       <p className="footer-note footer-note--soft">{business.tagline} ♥</p>
+
+      {editing ? (
+        <CustomizeSheet
+          item={editing.item}
+          initial={{
+            size: editing.size,
+            customization: editing.customization,
+            quantity: editing.quantity,
+          }}
+          submitLabel="Guardar cambios"
+          onSubmit={(item, size, customization, quantity) =>
+            onUpdate(editing.key, item, size, customization, quantity)
+          }
+          onClose={() => setEditing(null)}
+        />
+      ) : null}
     </div>
   )
 }

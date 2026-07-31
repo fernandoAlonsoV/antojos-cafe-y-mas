@@ -19,7 +19,10 @@ import { QuantityStepper } from './QuantityStepper'
 
 interface Props {
   item: MenuItem
-  onAdd: (item: MenuItem, size: Size, customization: Customization, quantity: number) => void
+  /** Valores de partida al editar una línea del carrito; si falta, se personaliza desde cero. */
+  initial?: { size: Size; customization: Customization; quantity: number }
+  submitLabel?: string
+  onSubmit: (item: MenuItem, size: Size, customization: Customization, quantity: number) => void
   onClose: () => void
 }
 
@@ -37,12 +40,18 @@ const milkIcons: Record<MilkId, (props: { className?: string }) => ReactNode> = 
   soya: SoyIcon,
 }
 
-export function CustomizeSheet({ item, onAdd, onClose }: Props) {
-  const [customization, setCustomization] = useState<Customization>(() =>
-    defaultCustomization(item.options),
+export function CustomizeSheet({
+  item,
+  initial,
+  submitLabel = 'Agregar al pedido',
+  onSubmit,
+  onClose,
+}: Props) {
+  const [customization, setCustomization] = useState<Customization>(
+    () => initial?.customization ?? defaultCustomization(item.options),
   )
-  const [size, setSize] = useState<Size>(item.sizes[0])
-  const [quantity, setQuantity] = useState(1)
+  const [size, setSize] = useState<Size>(initial?.size ?? item.sizes[0])
+  const [quantity, setQuantity] = useState(initial?.quantity ?? 1)
   const [dragOffset, setDragOffset] = useState(0)
   const dragStart = useRef<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -87,7 +96,7 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
         className="sheet"
         role="dialog"
         aria-modal="true"
-        aria-label={`Personalizar ${item.name}`}
+        aria-label={`${initial ? 'Editar' : 'Personalizar'} ${item.name}`}
         onClick={(event) => event.stopPropagation()}
         style={
           dragOffset > 0
@@ -111,7 +120,7 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
         >
-          <h2>PERSONALIZAR</h2>
+          <h2>{initial ? 'EDITAR' : 'PERSONALIZAR'}</h2>
           <button
             ref={closeRef}
             type="button"
@@ -271,11 +280,11 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
           type="button"
           className="button button--sheet"
           onClick={() => {
-            onAdd(item, size, { ...customization, notes: customization.notes.trim() }, quantity)
+            onSubmit(item, size, { ...customization, notes: customization.notes.trim() }, quantity)
             onClose()
           }}
         >
-          Agregar al pedido · <strong>{formatPrice(estimated)}</strong>
+          {submitLabel} · <strong>{formatPrice(estimated)}</strong>
         </button>
       </section>
     </div>
