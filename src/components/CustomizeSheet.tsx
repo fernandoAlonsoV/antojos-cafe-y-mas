@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react'
 import { NOTES_MAX_LENGTH, defaultCustomization, milks, sweeteners } from '../data/options'
 import { formatPrice, sizeLabel } from '../lib/whatsapp'
 import type { Customization, MenuItem, MilkId, Size, SweetenerId } from '../types'
@@ -22,13 +23,13 @@ interface Props {
   onClose: () => void
 }
 
-const sweetenerIcons: Record<SweetenerId, (props: { className?: string }) => React.ReactNode> = {
+const sweetenerIcons: Record<SweetenerId, (props: { className?: string }) => ReactNode> = {
   'azucar-morena': SugarIcon,
   miel: HoneyIcon,
   syrups: SyrupIcon,
 }
 
-const milkIcons: Record<MilkId, (props: { className?: string }) => React.ReactNode> = {
+const milkIcons: Record<MilkId, (props: { className?: string }) => ReactNode> = {
   entera: CowIcon,
   deslactosada: BottleIcon,
   avena: OatIcon,
@@ -42,6 +43,8 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
   )
   const [size, setSize] = useState<Size>(item.sizes[0])
   const [quantity, setQuantity] = useState(1)
+  const [dragOffset, setDragOffset] = useState(0)
+  const dragStart = useRef<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -59,6 +62,25 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
 
   const estimated = size.price * quantity
 
+  const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    if (event.target instanceof Element && event.target.closest('button')) return
+    event.preventDefault()
+    dragStart.current = event.clientY
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+    if (dragStart.current === null) return
+    setDragOffset(Math.max(0, event.clientY - dragStart.current))
+  }
+
+  const handlePointerUp = () => {
+    if (dragStart.current === null) return
+    dragStart.current = null
+    if (dragOffset > 110) onClose()
+    else setDragOffset(0)
+  }
+
   return (
     <div className="sheet-overlay" role="presentation" onClick={onClose}>
       <section
@@ -67,9 +89,28 @@ export function CustomizeSheet({ item, onAdd, onClose }: Props) {
         aria-modal="true"
         aria-label={`Personalizar ${item.name}`}
         onClick={(event) => event.stopPropagation()}
+        style={
+          dragOffset > 0
+            ? { transform: `translateY(${dragOffset}px)`, transition: 'none' }
+            : undefined
+        }
       >
-        <span className="sheet__handle" aria-hidden="true" />
-        <header className="sheet__head">
+        <div
+          className="sheet__grab"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          <span className="sheet__handle" aria-hidden="true" />
+        </div>
+        <header
+          className="sheet__head"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
           <h2>PERSONALIZAR</h2>
           <button
             ref={closeRef}

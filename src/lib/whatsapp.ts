@@ -1,6 +1,8 @@
 import { business } from '../config'
+import { categories } from '../data/menu'
 import { milkLabel, sweetenerLabel } from '../data/options'
-import type { CartLine, CustomerInfo, Customization, MenuItem, Size } from '../types'
+import type { CartLine, Category, CustomerInfo, Customization, MenuItem, Size } from '../types'
+import { isDelivery, pickupNote } from './delivery'
 
 export function formatPrice(value: number): string {
   return `${business.currency}${value.toFixed(2)}`
@@ -26,22 +28,39 @@ export function customizationSummary(item: MenuItem, customization: Customizatio
   return parts
 }
 
+/** Agrupa las líneas por categoría, respetando el orden del menú. */
+export function groupByCategory(lines: CartLine[]): { category: Category; lines: CartLine[] }[] {
+  return categories
+    .map((category) => ({
+      category,
+      lines: lines.filter((line) => line.item.category === category.id),
+    }))
+    .filter((group) => group.lines.length > 0)
+}
+
 export function buildOrderMessage(
   lines: CartLine[],
   subtotal: number,
   shipping: number,
   customer: CustomerInfo,
 ): string {
-  const items = lines.flatMap((line) => {
-    const head = `${line.item.emoji} ${line.item.name.toUpperCase()} (${sizeLabel(line.size)}) x${line.quantity}   ${formatPrice(
-      line.quantity * line.size.price,
-    )}`
-    const details = [
-      ...customizationSummary(line.item, line.customization).map((part) => `   • ${part}`),
-      ...(line.customization.notes.trim() ? [`   • Nota: ${line.customization.notes.trim()}`] : []),
-    ]
-    return [head, ...details]
-  })
+  const items = groupByCategory(lines).flatMap(({ category, lines: group }) => [
+    `*${category.label.toUpperCase()}*`,
+    ...group.flatMap((line) => {
+      const head = `${line.item.emoji} ${line.item.name.toUpperCase()} (${sizeLabel(line.size)}) x${line.quantity}   ${formatPrice(
+        line.quantity * line.size.price,
+      )}`
+      const details = [
+        ...customizationSummary(line.item, line.customization).map((part) => `   • ${part}`),
+        ...(line.customization.notes.trim()
+          ? [`   • Nota: ${line.customization.notes.trim()}`]
+          : []),
+      ]
+      return [head, ...details]
+    }),
+    '',
+  ])
+  items.pop()
 
   const totals = [`Subtotal: ${formatPrice(subtotal)}`]
   if (shipping > 0) totals.push(`Envío: ${formatPrice(shipping)}`)
@@ -58,7 +77,7 @@ export function buildOrderMessage(
     '',
     `Nombre: ${customer.name}`,
     `Teléfono: ${customer.phone}`,
-    `Dirección: ${customer.address}`,
+    isDelivery ? `Dirección: ${customer.address}` : pickupNote,
     `Notas: ${customer.notes.trim() || 'Sin notas adicionales'}`,
     '',
     '¡Gracias!',
@@ -66,5 +85,6 @@ export function buildOrderMessage(
 }
 
 export function whatsappUrl(message: string): string {
-  return `https://wa.me/${business.whatsappNumber}?text=${encodeURIComponent(message)}`
+  // api.whatsapp.com en vez de wa.me: su redirección rompe los emojis del mensaje.
+  return `https://api.whatsapp.com/send?phone=${business.whatsappNumber}&text=${encodeURIComponent(message)}`
 }

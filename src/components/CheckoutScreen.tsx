@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { business } from '../config'
+import { isDelivery, pickupNote } from '../lib/delivery'
 import { buildOrderMessage, whatsappUrl } from '../lib/whatsapp'
 import type { CartLine, CustomerInfo } from '../types'
 import { BackIcon, LeafIcon, WhatsappIcon } from './Icons'
@@ -24,11 +25,15 @@ const labels: Record<Field, string> = {
   address: 'Dirección',
 }
 
+const fields: Field[] = isDelivery ? ['name', 'phone', 'address'] : ['name', 'phone']
+
 function validate(customer: CustomerInfo): Partial<Record<Field, string>> {
   const errors: Partial<Record<Field, string>> = {}
   if (customer.name.trim().length < 2) errors.name = 'Escribe tu nombre completo.'
   if (customer.phone.replace(/\D/g, '').length < 10) errors.phone = 'Escribe 10 dígitos de tu teléfono.'
-  if (customer.address.trim().length < 5) errors.address = 'Escribe tu dirección de entrega.'
+  if (isDelivery && customer.address.trim().length < 5) {
+    errors.address = 'Escribe tu dirección de entrega.'
+  }
   return errors
 }
 
@@ -80,7 +85,7 @@ export function CheckoutScreen({
       </p>
 
       <form className="form" onSubmit={handleSubmit} noValidate>
-        {(['name', 'phone', 'address'] as Field[]).map((field) => (
+        {fields.map((field) => (
           <label key={field} className="field">
             <span className="field__label">
               {labels[field]} <span aria-hidden="true">*</span>
@@ -102,6 +107,8 @@ export function CheckoutScreen({
             {showError(field) ? <span className="field__error">{showError(field)}</span> : null}
           </label>
         ))}
+
+        {isDelivery ? null : <p className="pickup-note">{pickupNote}</p>}
 
         <label className="field">
           <span className="field__label">¿Alguna nota adicional?</span>
