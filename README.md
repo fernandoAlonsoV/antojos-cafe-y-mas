@@ -53,6 +53,20 @@ Y qué admite personalizar con `options` (lo que esté en `false` no aparece en 
 options: { milk: false } // smoothies, refreshers y milkshakes: no se elige leche
 ```
 
+### Badges de producto
+
+Cada producto puede llevar etiquetas con sólo agregar `badges` a su objeto en `src/data/menu.ts`
+(los colores y emojis viven en `src/data/badges.ts`): `nuevo`, `temporada`, `mas-vendido`, `popular`,
+`promocion`, `edicion-limitada`, `vegano`, `frio` y `recomendado`. Si falta la propiedad, no se muestra nada.
+
+Con el badge `promocion` se muestra el precio nuevo y el anterior tachado (en la card, en el panel de
+personalización y en el carrito); el precio anterior se declara por tamaño con `previousPrice`:
+
+```ts
+badges: ['promocion', 'popular'],
+sizes: [{ oz: 20, price: 6, previousPrice: 7 }],
+```
+
 El grado de endulzamiento (0 % = sin endulzar, 100 % = muy dulce) se pide en todos los productos con un
 control de porcentaje; smoothies y refreshers se preparan con agua y los milkshakes sólo con leche entera,
 así que en esos casos no se muestra el selector de leche y su descripción lo aclara.

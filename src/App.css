@@ -202,6 +202,46 @@
   box-shadow: var(--shadow);
 }
 
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.item__prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.item__prices s,
+.sheet__estimate s,
+.cart-line__price s {
+  margin-left: 8px;
+  color: var(--brown-soft);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.item__prices s {
+  margin-left: 0;
+}
+
 .item__top {
   display: flex;
   gap: 14px;

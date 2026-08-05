@@ -1,4 +1,4 @@
-import type { Category, ItemOptions, MenuItem, Size } from "../types";
+import type { BadgeId, Category, ItemOptions, MenuItem, Size } from "../types";
 
 export const categories: Category[] = [
   {
@@ -55,15 +55,20 @@ const NO_MILK: ItemOptions = { milk: false };
 
 const oz20 = (price: number): Size[] => [{ oz: 20, price }];
 const oz16 = (price: number): Size[] => [{ oz: 16, price }];
+
+/** Producto de la lista de una categoría; `badges` es opcional. */
+type Listed = { name: string; image: string; badges?: BadgeId[] };
+
 const mini10y20: Size[] = [
   { oz: 10, price: 5, label: "Mini" },
   { oz: 20, price: 7 },
 ];
 
-const cafeLattes = [
+const cafeLattes: Listed[] = [
   {
     name: "Vanilla latte",
     image: "products/vainilla_latte_500x500px.webp",
+    badges: ["mas-vendido"],
   },
   {
     name: "Rompope latte",
@@ -108,17 +113,20 @@ const cafeLattes = [
   {
     name: "Pumpkin spice latte",
     image: "products/pumpkin_spice_latte_500x500px.webp",
+    badges: ["temporada", "nuevo"],
   },
   {
     name: "Chips ahoy latte",
     image: "products/chips_ahoy_latte_500x500px.webp",
+    badges: ["nuevo"],
   },
 ];
 
-const matchas = [
+const matchas: Listed[] = [
   {
     name: "Matcha latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: ["recomendado"],
   },
   {
     name: "Vanilla Matcha",
@@ -197,18 +205,20 @@ function slug(name: string): string {
 }
 
 export const menu: MenuItem[] = [
-  ...cafeLattes.map<MenuItem>(({ name, image }) => ({
+  ...cafeLattes.map<MenuItem>(({ name, image, badges }) => ({
     id: slug(name),
     name,
+    badges,
     category: "cafe-lattes",
     emoji: "☕",
     image,
     sizes: oz20(6),
     options: WITH_MILK,
   })),
-  ...matchas.map<MenuItem>(({ name, image }) => ({
+  ...matchas.map<MenuItem>(({ name, image, badges }) => ({
     id: slug(name),
     name,
+    badges,
     category: "matcha",
     emoji: "🍵",
     image,
@@ -232,8 +242,13 @@ export const menu: MenuItem[] = [
     category: "birthday-lattes",
     emoji: "🎂",
     image: PHOTO,
-    sizes: mini10y20,
+    // Con el badge "promocion" se tacha `previousPrice` y se cobra `price`.
+    sizes: [
+      { oz: 10, price: 4, label: "Mini", previousPrice: 5 },
+      { oz: 20, price: 6, previousPrice: 7 },
+    ],
     options: WITH_MILK,
+    badges: ["promocion", "popular"],
   },
   {
     id: "birthday-matcha-drink",
@@ -276,6 +291,7 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     sizes: oz16(5),
     options: NO_MILK,
+    badges: ["frio", "vegano"],
   },
   {
     id: "lemonade",

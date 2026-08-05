@@ -13,6 +13,7 @@ import {
   defaultCustomization,
   milks,
 } from "../data/options";
+import { badges, previousPrice } from "../data/badges";
 import { formatPrice, sizeLabel } from "../lib/whatsapp";
 import type { Customization, MenuItem, MilkId, Size } from "../types";
 import {
@@ -78,6 +79,8 @@ export function CustomizeSheet({
   }, [onClose]);
 
   const estimated = size.price * quantity;
+  const before = previousPrice(item, size);
+  const estimatedBefore = before !== null ? before * quantity : null;
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.target instanceof Element && event.target.closest("button"))
@@ -142,6 +145,21 @@ export function CustomizeSheet({
         </header>
 
         <div className="sheet__body">
+          {item.badges?.length ? (
+            <ul className="tags">
+              {item.badges.map((id) => (
+                <li
+                  key={id}
+                  className="tag"
+                  style={{ background: badges[id].color }}
+                >
+                  <span aria-hidden="true">{badges[id].emoji}</span>{" "}
+                  {badges[id].label}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
           <label className="group sweetness">
             <span className="group__title">GRADO DE ENDULZAMIENTO</span>
             <span className="sweetness__scale">
@@ -270,6 +288,11 @@ export function CustomizeSheet({
             <div className="sheet__estimate">
               <span className="group__title">PRECIO ESTIMADO</span>
               <strong>{formatPrice(estimated)}</strong>
+              {estimatedBefore !== null ? (
+                <s aria-label={`Antes ${formatPrice(estimatedBefore)}`}>
+                  {formatPrice(estimatedBefore)}
+                </s>
+              ) : null}
             </div>
           </div>
         </div>
