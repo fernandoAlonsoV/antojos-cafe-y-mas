@@ -11,17 +11,22 @@ export const categories: Category[] = [
   },
   { id: 'birthday-lattes', label: 'Birthday Lattes', icon: 'birthday', note: 'Dulce, colorido y perfecto para celebrar' },
   { id: 'birthday-matcha', label: 'Birthday Matcha', icon: 'birthday', note: 'Alegre, cremoso y lleno de sabor' },
-  { id: 'smoothies', label: 'Smoothie', icon: 'smoothie', note: 'Vaso de 16 oz' },
-  { id: 'kids', label: 'Kids Menú', icon: 'milkshake', note: 'Milkshakes en vaso de 16 oz' },
-  { id: 'refreshers', label: 'Refreshers', icon: 'refresher', note: 'Vaso de 16 oz' },
+  { id: 'smoothies', label: 'Smoothie', icon: 'smoothie', note: 'Vaso de 16 oz · preparado con agua' },
+  {
+    id: 'kids',
+    label: 'Kids Menú',
+    icon: 'milkshake',
+    note: 'Milkshakes en vaso de 16 oz · sólo con leche entera',
+  },
+  { id: 'refreshers', label: 'Refreshers', icon: 'refresher', note: 'Vaso de 16 oz · preparado con agua' },
 ]
 
 const PHOTO = 'products/producto-small-267x-20y-350x350px.webp'
 
-/** Bebidas de leche: se puede elegir endulzante y tipo de leche. */
-const WITH_MILK: ItemOptions = { sweetener: true, milk: true }
-/** Bebidas sin leche (limonadas): sólo endulzante. */
-const NO_MILK: ItemOptions = { sweetener: true, milk: false }
+/** Bebidas en las que el cliente elige el tipo de leche. */
+const WITH_MILK: ItemOptions = { milk: true }
+/** Bebidas con agua o con leche fija (milkshakes): no se elige leche. */
+const NO_MILK: ItemOptions = { milk: false }
 
 const oz20 = (price: number): Size[] => [{ oz: 20, price }]
 const oz16 = (price: number): Size[] => [{ oz: 16, price }]
@@ -134,26 +139,27 @@ export const menu: MenuItem[] = [
   {
     id: 'berry-smoothie',
     name: 'Berry Smoothie',
-    description: 'Frutos rojos, cremoso y refrescante.',
+    description: 'Frutos rojos y muy refrescante; se prepara con agua, sin leche.',
     category: 'smoothies',
     emoji: '🍓',
     image: PHOTO,
     sizes: oz16(5),
-    options: WITH_MILK,
+    options: NO_MILK,
   },
   ...milkshakes.map<MenuItem>((name) => ({
     id: slug(name),
     name,
+    description: 'Se prepara únicamente con leche entera.',
     category: 'kids',
     emoji: '🥤',
     image: PHOTO,
     sizes: oz16(5),
-    options: WITH_MILK,
+    options: NO_MILK,
   })),
   {
     id: 'dragon-fruit-lemonade',
     name: 'Dragón Fruit Lemonade',
-    description: 'Limonada afrutada y muy refrescante.',
+    description: 'Limonada afrutada y muy refrescante; se prepara con agua, sin leche.',
     category: 'refreshers',
     emoji: '🐉',
     image: PHOTO,
@@ -163,7 +169,7 @@ export const menu: MenuItem[] = [
   {
     id: 'lemonade',
     name: 'Lemonade',
-    description: 'Limonada natural bien fría.',
+    description: 'Limonada natural bien fría; se prepara con agua, sin leche.',
     category: 'refreshers',
     emoji: '🍋',
     image: PHOTO,

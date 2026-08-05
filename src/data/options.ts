@@ -1,10 +1,4 @@
-import type { Customization, ItemOptions, MilkId, SweetenerId } from '../types'
-
-export const sweeteners: { id: SweetenerId; label: string }[] = [
-  { id: 'azucar-morena', label: 'Azúcar morena' },
-  { id: 'miel', label: 'Miel' },
-  { id: 'syrups', label: 'Syrups' },
-]
+import type { Customization, ItemOptions, MilkId } from '../types'
 
 export const milks: { id: MilkId; label: string }[] = [
   { id: 'entera', label: 'Entera' },
@@ -16,18 +10,25 @@ export const milks: { id: MilkId; label: string }[] = [
 
 export const NOTES_MAX_LENGTH = 100
 
-export function sweetenerLabel(id: SweetenerId): string {
-  return sweeteners.find((option) => option.id === id)?.label ?? id
-}
+/** Escala del grado de endulzamiento (en porcentaje). */
+export const SWEETNESS_MIN = 0
+export const SWEETNESS_MAX = 100
+export const SWEETNESS_STEP = 5
+export const SWEETNESS_DEFAULT = 50
 
 export function milkLabel(id: MilkId): string {
   return milks.find((option) => option.id === id)?.label ?? id
 }
 
+/** Descripción del grado de endulzamiento para el pedido. */
+export function sweetnessLabel(value: number): string {
+  if (value <= 0) return 'Sin endulzar'
+  return `Dulzor ${value}%`
+}
+
 export function defaultCustomization(options: ItemOptions): Customization {
   return {
-    sweetened: options.sweetener,
-    sweetener: options.sweetener ? sweeteners[0].id : null,
+    sweetness: SWEETNESS_DEFAULT,
     milk: options.milk ? milks[0].id : null,
     notes: '',
   }

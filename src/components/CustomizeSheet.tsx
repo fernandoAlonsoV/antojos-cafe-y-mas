@@ -1,20 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react'
-import { NOTES_MAX_LENGTH, defaultCustomization, milks, sweeteners } from '../data/options'
-import { formatPrice, sizeLabel } from '../lib/whatsapp'
-import type { Customization, MenuItem, MilkId, Size, SweetenerId } from '../types'
+import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from 'react'
 import {
-  AlmondIcon,
-  BanIcon,
-  BottleIcon,
-  CloseIcon,
-  CowIcon,
-  HoneyIcon,
-  OatIcon,
-  SoyIcon,
-  SugarIcon,
-  SyrupIcon,
-} from './Icons'
+  NOTES_MAX_LENGTH,
+  SWEETNESS_MAX,
+  SWEETNESS_MIN,
+  SWEETNESS_STEP,
+  defaultCustomization,
+  milks,
+} from '../data/options'
+import { formatPrice, sizeLabel } from '../lib/whatsapp'
+import type { Customization, MenuItem, MilkId, Size } from '../types'
+import { AlmondIcon, BottleIcon, CloseIcon, CowIcon, OatIcon, SoyIcon } from './Icons'
 import { QuantityStepper } from './QuantityStepper'
 
 interface Props {
@@ -24,12 +20,6 @@ interface Props {
   submitLabel?: string
   onSubmit: (item: MenuItem, size: Size, customization: Customization, quantity: number) => void
   onClose: () => void
-}
-
-const sweetenerIcons: Record<SweetenerId, (props: { className?: string }) => ReactNode> = {
-  'azucar-morena': SugarIcon,
-  miel: HoneyIcon,
-  syrups: SyrupIcon,
 }
 
 const milkIcons: Record<MilkId, (props: { className?: string }) => ReactNode> = {
@@ -133,67 +123,44 @@ export function CustomizeSheet({
         </header>
 
         <div className="sheet__body">
-          {item.options.sweetener ? (
-            <>
-              <fieldset className="group">
-                <legend className="group__title">ENDULZADO</legend>
-                <div className="chips chips--2">
-                  <button
-                    type="button"
-                    className={`chip${customization.sweetened ? ' chip--active' : ''}`}
-                    aria-pressed={customization.sweetened}
-                    onClick={() =>
-                      setCustomization((current) => ({
-                        ...current,
-                        sweetened: true,
-                        sweetener: current.sweetener ?? sweeteners[0].id,
-                      }))
-                    }
-                  >
-                    <SugarIcon className="icon" />
-                    Endulzado
-                  </button>
-                  <button
-                    type="button"
-                    className={`chip${customization.sweetened ? '' : ' chip--active'}`}
-                    aria-pressed={!customization.sweetened}
-                    onClick={() =>
-                      setCustomization((current) => ({ ...current, sweetened: false }))
-                    }
-                  >
-                    <BanIcon className="icon" />
-                    Sin endulzar
-                  </button>
-                </div>
-              </fieldset>
-
-              {customization.sweetened ? (
-                <fieldset className="group">
-                  <legend className="group__title">TIPO DE ENDULZANTE</legend>
-                  <div className="chips chips--3">
-                    {sweeteners.map((option) => {
-                      const Icon = sweetenerIcons[option.id]
-                      const isActive = customization.sweetener === option.id
-                      return (
-                        <button
-                          key={option.id}
-                          type="button"
-                          className={`chip chip--stack${isActive ? ' chip--outlined' : ''}`}
-                          aria-pressed={isActive}
-                          onClick={() =>
-                            setCustomization((current) => ({ ...current, sweetener: option.id }))
-                          }
-                        >
-                          <Icon className="icon" />
-                          {option.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </fieldset>
-              ) : null}
-            </>
-          ) : null}
+          <label className="group sweetness">
+            <span className="group__title">GRADO DE ENDULZAMIENTO</span>
+            <span className="sweetness__scale">
+              <span>{SWEETNESS_MIN}%</span>
+              <span>{SWEETNESS_MAX}%</span>
+            </span>
+            <span className="sweetness__track">
+              <input
+                type="range"
+                className="sweetness__range"
+                min={SWEETNESS_MIN}
+                max={SWEETNESS_MAX}
+                step={SWEETNESS_STEP}
+                value={customization.sweetness}
+                aria-label="Grado de endulzamiento"
+                aria-valuetext={`${customization.sweetness}%`}
+                style={{ '--fill': `${customization.sweetness}%` } as CSSProperties}
+                onChange={(event) =>
+                  setCustomization((current) => ({
+                    ...current,
+                    sweetness: Number(event.target.value),
+                  }))
+                }
+              />
+              <span
+                className="sweetness__bubble"
+                aria-hidden="true"
+                style={{ left: `calc(20px + (100% - 40px) * ${customization.sweetness} / 100)` }}
+              >
+                {customization.sweetness}%
+              </span>
+            </span>
+            <span className="sweetness__legend">
+              <span>Sin endulzar</span>
+              <span>Moderado</span>
+              <span>Muy dulce</span>
+            </span>
+          </label>
 
           {item.options.milk ? (
             <fieldset className="group">

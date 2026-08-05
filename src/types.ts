@@ -33,13 +33,10 @@ export interface Size {
   label?: string
 }
 
-export type SweetenerId = 'azucar-morena' | 'miel' | 'syrups'
-
 export type MilkId = 'entera' | 'deslactosada' | 'avena' | 'almendra' | 'soya'
 
 /** Qué se puede personalizar de un producto; lo que está en false no se muestra. */
 export interface ItemOptions {
-  sweetener: boolean
   milk: boolean
 }
 
@@ -55,9 +52,8 @@ export interface MenuItem {
 }
 
 export interface Customization {
-  sweetened: boolean
-  /** Sólo aplica si `sweetened` y el producto permite endulzante. */
-  sweetener: SweetenerId | null
+  /** Grado de endulzamiento de 0 (sin endulzar) a 100 (muy dulce). */
+  sweetness: number
   milk: MilkId | null
   notes: string
 }

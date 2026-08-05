@@ -164,44 +164,6 @@ export function CloseIcon({ className }: IconProps) {
   )
 }
 
-export function BanIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <circle cx="12" cy="12" r="8" />
-      <path d="M7 17 17 7" />
-    </svg>
-  )
-}
-
-export function SugarIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <path d="M4 13h16a8 8 0 0 1-8 6 8 8 0 0 1-8-6Z" />
-      <path d="M8.6 10.4a1.5 1.5 0 1 0 0-.1M12 8.6a1.5 1.5 0 1 0 0-.1M15.4 10.6a1.5 1.5 0 1 0 0-.1" />
-    </svg>
-  )
-}
-
-export function HoneyIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <path d="M6 5h10M11 5v4" />
-      <path d="M6.5 9h9l-1 4h-7Z" />
-      <path d="M11 13v3.5a2 2 0 1 0 2.5 1.9" />
-    </svg>
-  )
-}
-
-export function SyrupIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
-      <path d="M9 4h4v3H9z" />
-      <path d="M8 7h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
-      <path d="M16 9h2v3h-2" />
-    </svg>
-  )
-}
-
 export function CowIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true" {...base}>
