@@ -123,12 +123,12 @@ const cafeLattes: Listed[] = [
   {
     name: "Pumpkin spice latte",
     image: "products/pumpkin_spice_latte_500x500px.webp",
-    badges: [],
+    badges: ["nuevo", "temporada"],
   },
   {
     name: "Chips ahoy latte",
     image: "products/chips_ahoy_latte_500x500px.webp",
-    badges: [],
+    badges: ["nuevo", "temporada"],
   },
 ];
 
