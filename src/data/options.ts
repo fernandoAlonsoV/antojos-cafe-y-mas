@@ -12,7 +12,7 @@ export const NOTES_MAX_LENGTH = 100;
 
 /** Escala del grado de endulzamiento (en porcentaje). */
 export const SWEETNESS_MIN = 0;
-export const SWEETNESS_MAX = 100;
+export const SWEETNESS_MAX = 150;
 export const SWEETNESS_STEP = 25;
 export const SWEETNESS_DEFAULT = 100;
 

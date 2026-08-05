@@ -177,7 +177,9 @@ export function CustomizeSheet({
                 aria-label="Grado de endulzamiento"
                 aria-valuetext={`${customization.sweetness}%`}
                 style={
-                  { "--fill": `${customization.sweetness}%` } as CSSProperties
+                  {
+                    "--fill": `${(customization.sweetness / SWEETNESS_MAX) * 100}%`,
+                  } as CSSProperties
                 }
                 onChange={(event) =>
                   setCustomization((current) => ({
@@ -190,7 +192,9 @@ export function CustomizeSheet({
                 className="sweetness__bubble"
                 aria-hidden="true"
                 style={{
-                  left: `calc(20px + (100% - 40px) * ${customization.sweetness} / 100)`,
+                  left: `calc(
+                    20px + (100% - 40px) * ${customization.sweetness} / ${SWEETNESS_MAX}
+                  )`,
                 }}
               >
                 {customization.sweetness}%
@@ -198,6 +202,8 @@ export function CustomizeSheet({
             </span>
             <span className="sweetness__legend">
               <span>Sin endulzar</span>
+              <span></span>
+              <span></span>
               <span>Moderado</span>
               <span>Muy dulce</span>
             </span>
