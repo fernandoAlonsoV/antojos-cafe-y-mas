@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ReactElement } from 'react'
 import { business } from '../config'
+import { badges, previousPrice } from '../data/badges'
 import { categories, menu } from '../data/menu'
 import { formatPrice } from '../lib/whatsapp'
 import type { CategoryIcon, CategoryId, Customization, MenuItem, Size } from '../types'
@@ -108,9 +109,21 @@ export function MenuScreen({ count, subtotal, onAdd, onOpenCart }: Props) {
 
       <ul className="items">
         {items.map((item) => {
-          const from = Math.min(...item.sizes.map((size) => size.price))
+          const cheapest = item.sizes.reduce((best, size) =>
+            size.price < best.price ? size : best,
+          )
+          const before = previousPrice(item, cheapest)
           return (
             <li key={item.id} className="item">
+              {item.badges?.length ? (
+                <ul className="tags">
+                  {item.badges.map((id) => (
+                    <li key={id} className="tag" style={{ background: badges[id].color }}>
+                      <span aria-hidden="true">{badges[id].emoji}</span> {badges[id].label}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <div className="item__top">
                 <img className="item__image" src={item.image} alt={item.name} loading="lazy" />
                 <div className="item__body">
@@ -123,7 +136,12 @@ export function MenuScreen({ count, subtotal, onAdd, onOpenCart }: Props) {
               <div className="item__bottom">
                 <span className="item__from">
                   Desde
-                  <strong>{formatPrice(from)}</strong>
+                  <span className="item__prices">
+                    <strong>{formatPrice(cheapest.price)}</strong>
+                    {before !== null ? (
+                      <s aria-label={`Antes ${formatPrice(before)}`}>{formatPrice(before)}</s>
+                    ) : null}
+                  </span>
                 </span>
                 <button
                   type="button"

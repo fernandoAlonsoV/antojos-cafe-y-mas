@@ -31,7 +31,20 @@ export interface Size {
   price: number
   /** Etiqueta opcional (ej. "Mini"); si falta se usa "20 oz". */
   label?: string
+  /** Precio anterior; se muestra tachado sólo si el producto trae el badge `promocion`. */
+  previousPrice?: number
 }
+
+export type BadgeId =
+  | 'nuevo'
+  | 'temporada'
+  | 'mas-vendido'
+  | 'popular'
+  | 'promocion'
+  | 'edicion-limitada'
+  | 'vegano'
+  | 'frio'
+  | 'recomendado'
 
 export type MilkId = 'entera' | 'deslactosada' | 'avena' | 'almendra' | 'soya'
 
@@ -49,6 +62,8 @@ export interface MenuItem {
   image: string
   sizes: Size[]
   options: ItemOptions
+  /** Etiquetas que se muestran arriba del producto; si falta, no se muestra ninguna. */
+  badges?: BadgeId[]
 }
 
 export interface Customization {
