@@ -14,7 +14,7 @@ export const NOTES_MAX_LENGTH = 100;
 export const SWEETNESS_MIN = 0;
 export const SWEETNESS_MAX = 100;
 export const SWEETNESS_STEP = 25;
-export const SWEETNESS_DEFAULT = 50;
+export const SWEETNESS_DEFAULT = 100;
 
 export function milkLabel(id: MilkId): string {
   return milks.find((option) => option.id === id)?.label ?? id;
