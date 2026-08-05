@@ -68,22 +68,22 @@ const cafeLattes: Listed[] = [
   {
     name: "Vanilla latte",
     image: "products/vainilla_latte_500x500px.webp",
-    badges: ["nuevo", "temporada", "edicion-limitada"],
+    badges: [],
   },
   {
     name: "Rompope latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
-    badges: ["mas-vendido", "popular", "promocion"],
+    badges: [],
   },
   {
     name: "Biscoff latte",
     image: "products/biscoff_latte_500x500px.webp",
-    badges: ["vegano", "frio"],
+    badges: [],
   },
   {
     name: "Caramel latte",
     image: "products/caramel_latte_500x500px.webp",
-    badges: ["recomendado", "promocion"],
+    badges: [],
   },
   {
     name: "Nutella latte",
@@ -123,12 +123,12 @@ const cafeLattes: Listed[] = [
   {
     name: "Pumpkin spice latte",
     image: "products/pumpkin_spice_latte_500x500px.webp",
-    badges: ["temporada", "nuevo"],
+    badges: [],
   },
   {
     name: "Chips ahoy latte",
     image: "products/chips_ahoy_latte_500x500px.webp",
-    badges: ["temporada", "nuevo"],
+    badges: [],
   },
 ];
 
@@ -146,7 +146,7 @@ const matchas: Listed[] = [
   {
     name: "Double Matcha",
     image: "products/double_matcha_500x500px.webp",
-    badges: ["popular"],
+    badges: [],
   },
   {
     name: "Banana Matcha",
@@ -208,7 +208,7 @@ const cerealLattes: {
     name: "Fruity Pebbles Cereal Latte",
     description: "Divertido, afrutado y lleno de color.",
     image: "products/fruit_pebbles_latte_500x500px.webp",
-    badges: ["recomendado"],
+    badges: [],
   },
 ];
 
@@ -222,37 +222,37 @@ const milkshakes: {
     name: "Strawberry Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
   {
     name: "Chocolate Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
   {
     name: "Cookies & Cream Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
   {
     name: "Banana Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
   {
     name: "Nutella Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
   {
     name: "Biscoff Milkshake",
     description: "",
     image: "",
-    badges: ["frio"],
+    badges: [],
   },
 ];
 
@@ -307,16 +307,16 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     // Con el badge "promocion" se tacha `previousPrice` y se cobra `price`.
     sizes: [
-      { oz: 10, price: 4, label: "Mini", previousPrice: 5 },
-      { oz: 20, price: 6, previousPrice: 7 },
+      { oz: 10, price: 5, label: "Mini", previousPrice: 5 },
+      { oz: 20, price: 7, previousPrice: 7 },
     ],
     options: WITH_MILK,
-    badges: ["popular"],
+    badges: [],
   },
   {
     id: "birthday-matcha-drink",
     name: "Birthday Matcha",
-    badges: ["popular"],
+    badges: [],
     description: "Matcha cremoso con sabor a pastel de cumpleaños.",
     category: "birthday-matcha",
     emoji: "🎉",
@@ -327,7 +327,7 @@ export const menu: MenuItem[] = [
   {
     id: "berry-smoothie",
     name: "Berry Smoothie",
-    badges: ["frio"],
+    badges: [],
     description:
       "Frutos rojos y muy refrescante; se prepara con agua, sin leche.",
     category: "smoothies",
@@ -357,7 +357,7 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     sizes: oz16(5),
     options: NO_MILK,
-    badges: ["frio"],
+    badges: [],
   },
   {
     id: "lemonade",
@@ -368,6 +368,6 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     sizes: oz16(5),
     options: NO_MILK,
-    badges: ["frio"],
+    badges: [],
   },
 ];
