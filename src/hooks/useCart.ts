@@ -3,20 +3,24 @@ import { business } from '../config'
 import { menu } from '../data/menu'
 import type { CartLine, Customization, MenuItem, Size, StoredLine } from '../types'
 
-const STORAGE_KEY = 'antojos-cart-v3'
+const STORAGE_KEY = 'antojos-cart-v4'
 
 /** Firma que identifica una línea: mismo producto, tamaño y personalización se acumulan. */
 export function lineKey(itemId: string, sizeOz: number, customization: Customization): string {
-  const sweet = customization.sweetened ? (customization.sweetener ?? 'si') : 'sin'
-  return [itemId, sizeOz, sweet, customization.milk ?? '-', customization.notes.trim()].join('|')
+  return [
+    itemId,
+    sizeOz,
+    customization.sweetness,
+    customization.milk ?? '-',
+    customization.notes.trim(),
+  ].join('|')
 }
 
 function isCustomization(value: unknown): value is Customization {
   if (typeof value !== 'object' || value === null) return false
   const candidate = value as Record<string, unknown>
   return (
-    typeof candidate.sweetened === 'boolean' &&
-    (typeof candidate.sweetener === 'string' || candidate.sweetener === null) &&
+    typeof candidate.sweetness === 'number' &&
     (typeof candidate.milk === 'string' || candidate.milk === null) &&
     typeof candidate.notes === 'string'
   )

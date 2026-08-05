@@ -1,6 +1,6 @@
 import { business } from '../config'
 import { categories } from '../data/menu'
-import { milkLabel, sweetenerLabel } from '../data/options'
+import { milkLabel, sweetnessLabel } from '../data/options'
 import type { CartLine, Category, CustomerInfo, Customization, MenuItem, Size } from '../types'
 import { isDelivery, pickupNote } from './delivery'
 
@@ -14,14 +14,7 @@ export function sizeLabel(size: Size): string {
 
 /** Resumen legible de la personalización, sin el tamaño ni las notas. */
 export function customizationSummary(item: MenuItem, customization: Customization): string[] {
-  const parts: string[] = []
-  if (item.options.sweetener) {
-    parts.push(
-      customization.sweetened && customization.sweetener
-        ? sweetenerLabel(customization.sweetener)
-        : 'Sin endulzar',
-    )
-  }
+  const parts: string[] = [sweetnessLabel(customization.sweetness)]
   if (item.options.milk && customization.milk) {
     parts.push(`Leche ${milkLabel(customization.milk).toLowerCase()}`)
   }

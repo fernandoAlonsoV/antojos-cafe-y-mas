@@ -392,6 +392,73 @@
   color: var(--brown-soft);
 }
 
+.sweetness__scale,
+.sweetness__legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--brown-soft);
+}
+
+.sweetness__legend {
+  color: var(--brown);
+}
+
+.sweetness__track {
+  position: relative;
+  display: block;
+  padding: 10px 0 14px;
+}
+
+.sweetness__range {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 8px;
+  margin: 0;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--brown) var(--fill, 50%), var(--line) var(--fill, 50%));
+  outline-offset: 6px;
+}
+
+.sweetness__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.sweetness__range::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.sweetness__bubble {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: var(--brown);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .chips {
   display: grid;
   gap: 10px;
@@ -399,10 +466,6 @@
 
 .chips--2 {
   grid-template-columns: repeat(2, 1fr);
-}
-
-.chips--3 {
-  grid-template-columns: repeat(3, 1fr);
 }
 
 .chip {
@@ -419,21 +482,10 @@
   font-weight: 600;
 }
 
-.chip--stack {
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-}
-
 .chip--active {
   background: var(--brown);
   border-color: var(--brown);
   color: #fff;
-}
-
-.chip--outlined {
-  border-color: var(--brown);
-  border-width: 2px;
 }
 
 .milks {
