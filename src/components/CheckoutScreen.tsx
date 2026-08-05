@@ -1,40 +1,45 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { business } from '../config'
-import { isDelivery, pickupNote } from '../lib/delivery'
-import { buildOrderMessage, whatsappUrl } from '../lib/whatsapp'
-import type { CartLine, CustomerInfo } from '../types'
-import { BackIcon, LeafIcon, WhatsappIcon } from './Icons'
-import { OrderTotals } from './OrderTotals'
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { business } from "../config";
+import { isDelivery, pickupNote } from "../lib/delivery";
+import { buildOrderMessage, whatsappUrl } from "../lib/whatsapp";
+import type { CartLine, CustomerInfo } from "../types";
+import { BackIcon, LeafIcon, WhatsappIcon } from "./Icons";
+import { OrderTotals } from "./OrderTotals";
+import { TEXTAREA_PLACEHOLDER_CHECKOUT } from "../data/options";
 
 interface Props {
-  lines: CartLine[]
-  subtotal: number
-  shipping: number
-  total: number
-  customer: CustomerInfo
-  onChangeCustomer: (customer: CustomerInfo) => void
-  onBack: () => void
+  lines: CartLine[];
+  subtotal: number;
+  shipping: number;
+  total: number;
+  customer: CustomerInfo;
+  onChangeCustomer: (customer: CustomerInfo) => void;
+  onBack: () => void;
 }
 
-type Field = 'name' | 'phone' | 'address'
+type Field = "name" | "phone" | "address";
 
 const labels: Record<Field, string> = {
-  name: 'Nombre',
-  phone: 'Teléfono',
-  address: 'Dirección',
-}
+  name: "Nombre",
+  phone: "Teléfono",
+  address: "Dirección",
+};
 
-const fields: Field[] = isDelivery ? ['name', 'phone', 'address'] : ['name', 'phone']
+const fields: Field[] = isDelivery
+  ? ["name", "phone", "address"]
+  : ["name", "phone"];
 
 function validate(customer: CustomerInfo): Partial<Record<Field, string>> {
-  const errors: Partial<Record<Field, string>> = {}
-  if (customer.name.trim().length < 2) errors.name = 'Escribe tu nombre completo.'
-  if (customer.phone.replace(/\D/g, '').length < 10) errors.phone = 'Escribe 10 dígitos de tu teléfono.'
+  const errors: Partial<Record<Field, string>> = {};
+  if (customer.name.trim().length < 2)
+    errors.name = "Escribe tu nombre completo.";
+  if (customer.phone.replace(/\D/g, "").length < 10)
+    errors.phone = "Escribe 10 dígitos de tu teléfono.";
   if (isDelivery && customer.address.trim().length < 5) {
-    errors.address = 'Escribe tu dirección de entrega.'
+    errors.address = "Escribe tu dirección de entrega.";
   }
-  return errors
+  return errors;
 }
 
 export function CheckoutScreen({
@@ -46,27 +51,35 @@ export function CheckoutScreen({
   onChangeCustomer,
   onBack,
 }: Props) {
-  const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({})
-  const [submitted, setSubmitted] = useState(false)
-  const errors = validate(customer)
+  const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
+  const [submitted, setSubmitted] = useState(false);
+  const errors = validate(customer);
 
-  const showError = (field: Field) => (submitted || touched[field] ? errors[field] : undefined)
+  const showError = (field: Field) =>
+    submitted || touched[field] ? errors[field] : undefined;
 
   const update = (field: keyof CustomerInfo, value: string) =>
-    onChangeCustomer({ ...customer, [field]: value })
+    onChangeCustomer({ ...customer, [field]: value });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setSubmitted(true)
-    if (Object.keys(errors).length > 0) return
-    const url = whatsappUrl(buildOrderMessage(lines, subtotal, shipping, customer))
-    window.open(url, '_blank', 'noopener')
-  }
+    event.preventDefault();
+    setSubmitted(true);
+    if (Object.keys(errors).length > 0) return;
+    const url = whatsappUrl(
+      buildOrderMessage(lines, subtotal, shipping, customer),
+    );
+    window.open(url, "_blank", "noopener");
+  };
 
   return (
     <div className="screen">
       <header className="topbar topbar--cart">
-        <button type="button" className="topbar__icon" aria-label="Volver a mi pedido" onClick={onBack}>
+        <button
+          type="button"
+          className="topbar__icon"
+          aria-label="Volver a mi pedido"
+          onClick={onBack}
+        >
           <BackIcon className="icon" />
         </button>
         <div className="topbar__title">
@@ -81,7 +94,8 @@ export function CheckoutScreen({
       </header>
 
       <p className="checkout-intro">
-        Completa tus datos para terminar el pedido. Los enviaremos junto con tu orden por WhatsApp.
+        Completa tus datos para terminar el pedido. Los enviaremos junto con tu
+        orden por WhatsApp.
       </p>
 
       <form className="form" onSubmit={handleSubmit} noValidate>
@@ -91,40 +105,51 @@ export function CheckoutScreen({
               {labels[field]} <span aria-hidden="true">*</span>
             </span>
             <input
-              className={`field__input${showError(field) ? ' field__input--error' : ''}`}
+              className={`field__input${showError(field) ? " field__input--error" : ""}`}
               name={field}
-              type={field === 'phone' ? 'tel' : 'text'}
-              inputMode={field === 'phone' ? 'tel' : undefined}
+              type={field === "phone" ? "tel" : "text"}
+              inputMode={field === "phone" ? "tel" : undefined}
               autoComplete={
-                field === 'name' ? 'name' : field === 'phone' ? 'tel' : 'street-address'
+                field === "name"
+                  ? "name"
+                  : field === "phone"
+                    ? "tel"
+                    : "street-address"
               }
               value={customer[field]}
               required
               aria-invalid={showError(field) ? true : undefined}
               onChange={(event) => update(field, event.target.value)}
-              onBlur={() => setTouched((current) => ({ ...current, [field]: true }))}
+              onBlur={() =>
+                setTouched((current) => ({ ...current, [field]: true }))
+              }
             />
-            {showError(field) ? <span className="field__error">{showError(field)}</span> : null}
+            {showError(field) ? (
+              <span className="field__error">{showError(field)}</span>
+            ) : null}
           </label>
         ))}
 
         {isDelivery ? null : <p className="pickup-note">{pickupNote}</p>}
 
         <label className="field">
-          <span className="field__label">¿Alguna nota adicional?</span>
+          <span className="field__label">Comentarios para la entrega ⭐</span>
           <textarea
             className="field__input field__input--area"
             name="notes"
             rows={3}
-            placeholder="Sin azúcar, extra topping, hora de entrega…"
+            placeholder={TEXTAREA_PLACEHOLDER_CHECKOUT}
             value={customer.notes}
-            onChange={(event) => update('notes', event.target.value)}
+            onChange={(event) => update("notes", event.target.value)}
           />
         </label>
 
         <OrderTotals subtotal={subtotal} shipping={shipping} total={total} />
 
-        <button type="submit" className="button button--primary button--whatsapp">
+        <button
+          type="submit"
+          className="button button--primary button--whatsapp"
+        >
           <WhatsappIcon className="icon icon--whatsapp" />
           <span>
             <strong>ENVIAR PEDIDO POR WHATSAPP</strong>
@@ -141,5 +166,5 @@ export function CheckoutScreen({
         {business.payments} · {business.location}
       </p>
     </div>
-  )
+  );
 }

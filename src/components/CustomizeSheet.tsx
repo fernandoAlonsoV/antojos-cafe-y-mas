@@ -1,84 +1,103 @@
-import { useEffect, useRef, useState } from 'react'
-import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from 'react'
+import { useEffect, useRef, useState } from "react";
+import type {
+  CSSProperties,
+  PointerEvent as ReactPointerEvent,
+  ReactNode,
+} from "react";
 import {
   NOTES_MAX_LENGTH,
   SWEETNESS_MAX,
   SWEETNESS_MIN,
   SWEETNESS_STEP,
+  TEXTAREA_PLACEHOLDER_PRODUCT,
   defaultCustomization,
   milks,
-} from '../data/options'
-import { formatPrice, sizeLabel } from '../lib/whatsapp'
-import type { Customization, MenuItem, MilkId, Size } from '../types'
-import { AlmondIcon, BottleIcon, CloseIcon, CowIcon, OatIcon, SoyIcon } from './Icons'
-import { QuantityStepper } from './QuantityStepper'
+} from "../data/options";
+import { formatPrice, sizeLabel } from "../lib/whatsapp";
+import type { Customization, MenuItem, MilkId, Size } from "../types";
+import {
+  AlmondIcon,
+  BottleIcon,
+  CloseIcon,
+  CowIcon,
+  OatIcon,
+  SoyIcon,
+} from "./Icons";
+import { QuantityStepper } from "./QuantityStepper";
 
 interface Props {
-  item: MenuItem
+  item: MenuItem;
   /** Valores de partida al editar una línea del carrito; si falta, se personaliza desde cero. */
-  initial?: { size: Size; customization: Customization; quantity: number }
-  submitLabel?: string
-  onSubmit: (item: MenuItem, size: Size, customization: Customization, quantity: number) => void
-  onClose: () => void
+  initial?: { size: Size; customization: Customization; quantity: number };
+  submitLabel?: string;
+  onSubmit: (
+    item: MenuItem,
+    size: Size,
+    customization: Customization,
+    quantity: number,
+  ) => void;
+  onClose: () => void;
 }
 
-const milkIcons: Record<MilkId, (props: { className?: string }) => ReactNode> = {
-  entera: CowIcon,
-  deslactosada: BottleIcon,
-  avena: OatIcon,
-  almendra: AlmondIcon,
-  soya: SoyIcon,
-}
+const milkIcons: Record<MilkId, (props: { className?: string }) => ReactNode> =
+  {
+    entera: CowIcon,
+    deslactosada: BottleIcon,
+    avena: OatIcon,
+    almendra: AlmondIcon,
+    soya: SoyIcon,
+  };
 
 export function CustomizeSheet({
   item,
   initial,
-  submitLabel = 'Agregar al pedido',
+  submitLabel = "Agregar al pedido",
   onSubmit,
   onClose,
 }: Props) {
   const [customization, setCustomization] = useState<Customization>(
     () => initial?.customization ?? defaultCustomization(item.options),
-  )
-  const [size, setSize] = useState<Size>(initial?.size ?? item.sizes[0])
-  const [quantity, setQuantity] = useState(initial?.quantity ?? 1)
-  const [dragOffset, setDragOffset] = useState(0)
-  const dragStart = useRef<number | null>(null)
-  const closeRef = useRef<HTMLButtonElement>(null)
+  );
+  const [size, setSize] = useState<Size>(initial?.size ?? item.sizes[0]);
+  const [quantity, setQuantity] = useState(initial?.quantity ?? 1);
+  const [dragOffset, setDragOffset] = useState(0);
+  const dragStart = useRef<number | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    closeRef.current?.focus()
+    closeRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', onKeyDown)
-    document.body.classList.add('no-scroll')
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.classList.add("no-scroll");
     return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.body.classList.remove('no-scroll')
-    }
-  }, [onClose])
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("no-scroll");
+    };
+  }, [onClose]);
 
-  const estimated = size.price * quantity
+  const estimated = size.price * quantity;
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
-    if (event.target instanceof Element && event.target.closest('button')) return
-    event.preventDefault()
-    dragStart.current = event.clientY
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }
+    if (event.target instanceof Element && event.target.closest("button"))
+      return;
+    event.preventDefault();
+    dragStart.current = event.clientY;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
-    if (dragStart.current === null) return
-    setDragOffset(Math.max(0, event.clientY - dragStart.current))
-  }
+    if (dragStart.current === null) return;
+    setDragOffset(Math.max(0, event.clientY - dragStart.current));
+  };
 
   const handlePointerUp = () => {
-    if (dragStart.current === null) return
-    dragStart.current = null
-    if (dragOffset > 110) onClose()
-    else setDragOffset(0)
-  }
+    if (dragStart.current === null) return;
+    dragStart.current = null;
+    if (dragOffset > 110) onClose();
+    else setDragOffset(0);
+  };
 
   return (
     <div className="sheet-overlay" role="presentation" onClick={onClose}>
@@ -86,11 +105,11 @@ export function CustomizeSheet({
         className="sheet"
         role="dialog"
         aria-modal="true"
-        aria-label={`${initial ? 'Editar' : 'Personalizar'} ${item.name}`}
+        aria-label={`${initial ? "Editar" : "Personalizar"} ${item.name}`}
         onClick={(event) => event.stopPropagation()}
         style={
           dragOffset > 0
-            ? { transform: `translateY(${dragOffset}px)`, transition: 'none' }
+            ? { transform: `translateY(${dragOffset}px)`, transition: "none" }
             : undefined
         }
       >
@@ -110,7 +129,7 @@ export function CustomizeSheet({
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
         >
-          <h2>{initial ? 'EDITAR' : 'PERSONALIZAR'}</h2>
+          <h2>{initial ? "EDITAR" : "PERSONALIZAR"}</h2>
           <button
             ref={closeRef}
             type="button"
@@ -139,7 +158,9 @@ export function CustomizeSheet({
                 value={customization.sweetness}
                 aria-label="Grado de endulzamiento"
                 aria-valuetext={`${customization.sweetness}%`}
-                style={{ '--fill': `${customization.sweetness}%` } as CSSProperties}
+                style={
+                  { "--fill": `${customization.sweetness}%` } as CSSProperties
+                }
                 onChange={(event) =>
                   setCustomization((current) => ({
                     ...current,
@@ -150,7 +171,9 @@ export function CustomizeSheet({
               <span
                 className="sweetness__bubble"
                 aria-hidden="true"
-                style={{ left: `calc(20px + (100% - 40px) * ${customization.sweetness} / 100)` }}
+                style={{
+                  left: `calc(20px + (100% - 40px) * ${customization.sweetness} / 100)`,
+                }}
               >
                 {customization.sweetness}%
               </span>
@@ -167,22 +190,27 @@ export function CustomizeSheet({
               <legend className="group__title">TIPO DE LECHE</legend>
               <div className="milks">
                 {milks.map((option) => {
-                  const Icon = milkIcons[option.id]
-                  const isActive = customization.milk === option.id
+                  const Icon = milkIcons[option.id];
+                  const isActive = customization.milk === option.id;
                   return (
                     <button
                       key={option.id}
                       type="button"
-                      className={`milk${isActive ? ' milk--active' : ''}`}
+                      className={`milk${isActive ? " milk--active" : ""}`}
                       aria-pressed={isActive}
-                      onClick={() => setCustomization((current) => ({ ...current, milk: option.id }))}
+                      onClick={() =>
+                        setCustomization((current) => ({
+                          ...current,
+                          milk: option.id,
+                        }))
+                      }
                     >
                       <span className="milk__circle">
                         <Icon className="icon" />
                       </span>
                       {option.label}
                     </button>
-                  )
+                  );
                 })}
               </div>
             </fieldset>
@@ -196,7 +224,7 @@ export function CustomizeSheet({
                   <button
                     key={option.oz}
                     type="button"
-                    className={`chip${option.oz === size.oz ? ' chip--active' : ''}`}
+                    className={`chip${option.oz === size.oz ? " chip--active" : ""}`}
                     aria-pressed={option.oz === size.oz}
                     onClick={() => setSize(option)}
                   >
@@ -215,10 +243,13 @@ export function CustomizeSheet({
               className="field__input field__input--area"
               rows={3}
               maxLength={NOTES_MAX_LENGTH}
-              placeholder="Escribe aquí..."
+              placeholder={TEXTAREA_PLACEHOLDER_PRODUCT}
               value={customization.notes}
               onChange={(event) =>
-                setCustomization((current) => ({ ...current, notes: event.target.value }))
+                setCustomization((current) => ({
+                  ...current,
+                  notes: event.target.value,
+                }))
               }
             />
             <span className="group__counter">
@@ -247,13 +278,18 @@ export function CustomizeSheet({
           type="button"
           className="button button--sheet"
           onClick={() => {
-            onSubmit(item, size, { ...customization, notes: customization.notes.trim() }, quantity)
-            onClose()
+            onSubmit(
+              item,
+              size,
+              { ...customization, notes: customization.notes.trim() },
+              quantity,
+            );
+            onClose();
           }}
         >
           {submitLabel} · <strong>{formatPrice(estimated)}</strong>
         </button>
       </section>
     </div>
-  )
+  );
 }
