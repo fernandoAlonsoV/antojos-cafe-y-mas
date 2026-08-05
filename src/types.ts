@@ -1,99 +1,99 @@
 export type CategoryId =
-  | 'cafe-lattes'
-  | 'matcha'
-  | 'cereal-lattes'
-  | 'birthday-lattes'
-  | 'birthday-matcha'
-  | 'smoothies'
-  | 'kids'
-  | 'refreshers'
+  | "cafe-lattes"
+  | "matcha"
+  | "cereal-lattes"
+  | "birthday-lattes"
+  | "birthday-matcha"
+  | "smoothies"
+  | "kids"
+  | "refreshers";
 
 export type CategoryIcon =
-  | 'coffee'
-  | 'matcha'
-  | 'cereal'
-  | 'birthday'
-  | 'smoothie'
-  | 'milkshake'
-  | 'refresher'
+  | "coffee"
+  | "matcha"
+  | "cereal"
+  | "birthday"
+  | "smoothie"
+  | "milkshake"
+  | "refresher";
 
 export interface Category {
-  id: CategoryId
-  label: string
-  icon: CategoryIcon
+  id: CategoryId;
+  label: string;
+  icon: CategoryIcon;
   /** Nota corta que se muestra bajo el nombre de la categoría. */
-  note?: string
+  note?: string;
 }
 
 export interface Size {
   /** Onzas del vaso; también identifica al tamaño dentro del producto. */
-  oz: number
-  price: number
+  oz: number;
+  price: number;
   /** Etiqueta opcional (ej. "Mini"); si falta se usa "20 oz". */
-  label?: string
+  label?: string;
   /** Precio anterior; se muestra tachado sólo si el producto trae el badge `promocion`. */
-  previousPrice?: number
+  previousPrice?: number;
 }
 
 export type BadgeId =
-  | 'nuevo'
-  | 'temporada'
-  | 'mas-vendido'
-  | 'popular'
-  | 'promocion'
-  | 'edicion-limitada'
-  | 'vegano'
-  | 'frio'
-  | 'recomendado'
+  | "nuevo"
+  | "temporada"
+  | "mas-vendido"
+  | "popular"
+  | "promocion"
+  | "edicion-limitada"
+  | "vegano"
+  | "frio"
+  | "recomendado";
 
-export type MilkId = 'entera' | 'deslactosada' | 'avena' | 'almendra' | 'soya'
+export type MilkId = "entera" | "deslactosada" | "avena" | "almendra" | "soya";
 
 /** Qué se puede personalizar de un producto; lo que está en false no se muestra. */
 export interface ItemOptions {
-  milk: boolean
+  milk: boolean;
 }
 
 export interface MenuItem {
-  id: string
-  name: string
-  description?: string
-  category: CategoryId
-  emoji: string
-  image: string
-  sizes: Size[]
-  options: ItemOptions
+  id: string;
+  name: string;
+  description?: string;
+  category: CategoryId;
+  emoji: string;
+  image: string;
+  sizes: Size[];
+  options: ItemOptions;
   /** Etiquetas que se muestran arriba del producto; si falta, no se muestra ninguna. */
-  badges?: BadgeId[]
+  badges?: BadgeId[];
 }
 
 export interface Customization {
   /** Grado de endulzamiento de 0 (sin endulzar) a 100 (muy dulce). */
-  sweetness: number
-  milk: MilkId | null
-  notes: string
+  sweetness: number;
+  milk: MilkId | null;
+  notes: string;
 }
 
 /** Línea tal como se guarda en localStorage. */
 export interface StoredLine {
-  key: string
-  itemId: string
-  sizeOz: number
-  customization: Customization
-  quantity: number
+  key: string;
+  itemId: string;
+  sizeOz: number;
+  customization: Customization;
+  quantity: number;
 }
 
 export interface CartLine {
   /** Firma de producto + tamaño + personalización. */
-  key: string
-  item: MenuItem
-  size: Size
-  customization: Customization
-  quantity: number
+  key: string;
+  item: MenuItem;
+  size: Size;
+  customization: Customization;
+  quantity: number;
 }
 
 export interface CustomerInfo {
-  name: string
-  phone: string
-  address: string
-  notes: string
+  name: string;
+  phone: string;
+  address: string;
+  notes: string;
 }

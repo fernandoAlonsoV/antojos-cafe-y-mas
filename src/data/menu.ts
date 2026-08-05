@@ -53,7 +53,9 @@ const WITH_MILK: ItemOptions = { milk: true };
 /** Bebidas con agua o con leche fija (milkshakes): no se elige leche. */
 const NO_MILK: ItemOptions = { milk: false };
 
-const oz20 = (price: number): Size[] => [{ oz: 20, price }];
+const oz20 = (price: number): Size[] => [
+  { oz: 20, price: 6, previousPrice: 7 },
+];
 const oz16 = (price: number): Size[] => [{ oz: 16, price }];
 
 /** Producto de la lista de una categoría; `badges` es opcional. */
@@ -68,47 +70,57 @@ const cafeLattes: Listed[] = [
   {
     name: "Vanilla latte",
     image: "products/vainilla_latte_500x500px.webp",
-    badges: ["mas-vendido"],
+    badges: ["nuevo", "temporada", "edicion-limitada"],
   },
   {
     name: "Rompope latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: ["mas-vendido", "popular", "promocion"],
   },
   {
     name: "Biscoff latte",
     image: "products/biscoff_latte_500x500px.webp",
+    badges: ["vegano", "frio"],
   },
   {
     name: "Caramel latte",
     image: "products/caramel_latte_500x500px.webp",
+    badges: ["recomendado", "promocion"],
   },
   {
     name: "Nutella latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Banana latte",
     image: "products/banana_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Banana Biscoff latte",
     image: "products/banana_biscoff_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Mazapán latte",
     image: "products/mazapan_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Cookies & cream latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Ferrero Rocher latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Duvalín latte",
     image: "products/duvalin_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Pumpkin spice latte",
@@ -118,7 +130,7 @@ const cafeLattes: Listed[] = [
   {
     name: "Chips ahoy latte",
     image: "products/chips_ahoy_latte_500x500px.webp",
-    badges: ["nuevo"],
+    badges: ["temporada", "nuevo"],
   },
 ];
 
@@ -126,72 +138,119 @@ const matchas: Listed[] = [
   {
     name: "Matcha latte",
     image: "products/producto-small-267x-20y-350x350px.webp",
-    badges: ["recomendado"],
+    badges: [],
   },
   {
     name: "Vanilla Matcha",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Double Matcha",
     image: "products/double_matcha_500x500px.webp",
+    badges: ["popular"],
   },
   {
     name: "Banana Matcha",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Banana Biscoff Matcha",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Strawberry Matcha",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Blueberry Matcha",
     image: "products/blueberry_matcha_500x500px.webp",
+    badges: [],
   },
   {
     name: "Lavander Matcha",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Cookies & cream Matcha",
     image: "products/cookies_cream_matcha_500x500px.webp",
+    badges: [],
   },
 ];
 
-const cerealLattes: { name: string; description: string; image: string }[] = [
+const cerealLattes: {
+  name: string;
+  description: string;
+  image: string;
+  badges: BadgeId[];
+}[] = [
   {
     name: "Marshmallow Cereal Latte",
     description: "Dulce, cremoso y lleno de nostalgia.",
     image: "products/producto-small-267x-20y-350x350px.webp",
+    badges: [],
   },
   {
     name: "Cocoa Cereal Latte",
     description: "Intenso, chocolatoso y reconfortante.",
     image: "products/cocoa_cereal_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Cinnamon Toast Cereal Latte",
     description: "Suave, especiado y perfecto para ti.",
     image: "products/cinnamon_toast_cereal_latte_500x500px.webp",
+    badges: [],
   },
   {
     name: "Fruity Pebbles Cereal Latte",
     description: "Divertido, afrutado y lleno de color.",
     image: "products/fruit_pebbles_latte_500x500px.webp",
+    badges: ["recomendado"],
   },
 ];
 
 const milkshakes = [
-  "Strawberry Milkshake",
-  "Chocolate Milkshake",
-  "Cookies & Cream Milkshake",
-  "Banana Milkshake",
-  "Nutella Milkshake",
-  "Biscoff Milkshake",
+  {
+    name: "Strawberry Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
+  {
+    name: "Chocolate Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
+  {
+    name: "Cookies & Cream Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
+  {
+    name: "Banana Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
+  {
+    name: "Nutella Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
+  {
+    name: "Biscoff Milkshake",
+    description: "",
+    image: "",
+    badges: ["frio"],
+  },
 ];
 
 function slug(name: string): string {
@@ -225,10 +284,11 @@ export const menu: MenuItem[] = [
     sizes: oz20(7),
     options: WITH_MILK,
   })),
-  ...cerealLattes.map<MenuItem>(({ name, description, image }) => ({
+  ...cerealLattes.map<MenuItem>(({ name, description, image, badges }) => ({
     id: slug(name),
     name,
     description,
+    badges,
     category: "cereal-lattes",
     emoji: "🥣",
     image,
@@ -248,11 +308,12 @@ export const menu: MenuItem[] = [
       { oz: 20, price: 6, previousPrice: 7 },
     ],
     options: WITH_MILK,
-    badges: ["promocion", "popular"],
+    badges: ["popular"],
   },
   {
     id: "birthday-matcha-drink",
     name: "Birthday Matcha",
+    badges: ["popular"],
     description: "Matcha cremoso con sabor a pastel de cumpleaños.",
     category: "birthday-matcha",
     emoji: "🎉",
@@ -263,6 +324,7 @@ export const menu: MenuItem[] = [
   {
     id: "berry-smoothie",
     name: "Berry Smoothie",
+    badges: ["frio"],
     description:
       "Frutos rojos y muy refrescante; se prepara con agua, sin leche.",
     category: "smoothies",
@@ -271,10 +333,11 @@ export const menu: MenuItem[] = [
     sizes: oz16(5),
     options: NO_MILK,
   },
-  ...milkshakes.map<MenuItem>((name) => ({
+  ...milkshakes.map<MenuItem>(({ name, description, badges }) => ({
     id: slug(name),
     name,
-    description: "Se prepara únicamente con leche entera.",
+    badges,
+    description,
     category: "kids",
     emoji: "🥤",
     image: PHOTO,
@@ -291,7 +354,7 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     sizes: oz16(5),
     options: NO_MILK,
-    badges: ["frio", "vegano"],
+    badges: ["frio"],
   },
   {
     id: "lemonade",
@@ -302,5 +365,6 @@ export const menu: MenuItem[] = [
     image: PHOTO,
     sizes: oz16(5),
     options: NO_MILK,
+    badges: ["frio"],
   },
 ];
