@@ -53,9 +53,7 @@ const WITH_MILK: ItemOptions = { milk: true };
 /** Bebidas con agua o con leche fija (milkshakes): no se elige leche. */
 const NO_MILK: ItemOptions = { milk: false };
 
-const oz20 = (price: number): Size[] => [
-  { oz: 20, price: 6, previousPrice: 7 },
-];
+const oz20 = (price: number): Size[] => [{ oz: 20, price, previousPrice: 7 }];
 const oz16 = (price: number): Size[] => [{ oz: 16, price }];
 
 /** Producto de la lista de una categoría; `badges` es opcional. */
@@ -214,7 +212,12 @@ const cerealLattes: {
   },
 ];
 
-const milkshakes = [
+const milkshakes: {
+  name: string;
+  description: string;
+  image: string;
+  badges: BadgeId[];
+}[] = [
   {
     name: "Strawberry Milkshake",
     description: "",
